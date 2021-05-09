@@ -16,6 +16,9 @@ function app() {
     docker exec -it zend_cert_app /bin/bash
 }
 
+
+
+
 function api() {
     docker exec -it zend_cert_api /bin/bash
 }
