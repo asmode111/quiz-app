@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  api:
+    container_name: zend_cert_api
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile-api
+    ports:
+      - "8081:8080"
+    volumes:
+      - /api/node_modules
+    #      - ./api:/api:delegated
+    networks:
+      - zend_cert
+  app:
+    container_name: zend_cert_app
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile-app
+    volumes:
+      - /app/node_modules
+    #      - ./app:/app:delegated
+    ports:
+      - "8080:3000"
+    links:
+      - api
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true
+    networks:
+      - zend_cert
+networks:
+  zend_cert:
+    driver: bridge

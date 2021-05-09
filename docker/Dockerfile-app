@@ -1,0 +1,13 @@
+FROM node
+
+WORKDIR /app
+
+ENV PATH /app/node_modules/.bin:$PATH
+
+COPY /app/package.json ./
+COPY /app/src ./src/
+COPY /app/public ./public/
+
+# RUN yarn install
+
+CMD ["npm", "start", "index.tsx"]
