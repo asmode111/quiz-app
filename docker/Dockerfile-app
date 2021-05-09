@@ -10,4 +10,4 @@ COPY /app/public ./public/
 
 # RUN yarn install
 
-CMD ["npm", "start", "index.tsx"]
+CMD ["yarn", "run", "start"]
