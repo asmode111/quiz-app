@@ -5,9 +5,8 @@ WORKDIR /api
 COPY /api/package.json ./
 COPY /api/src ./src/
 
-RUN yarn install
+# RUN yarn install
 
 EXPOSE 8080
 
-# CMD [ "node", "src/index.js" ]
 CMD ["yarn", "start"]
