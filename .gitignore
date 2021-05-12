@@ -3,3 +3,5 @@ api/node_modules/*
 .idea
 app/var/cache/*
 app/var/log/*
+db
+.DS_Store

@@ -10,6 +10,7 @@ services:
     volumes:
       - /api/node_modules
       - ./api:/api:delegated
+      - ./db:/db
     networks:
       - zend_cert
   app:
