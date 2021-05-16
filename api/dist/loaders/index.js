@@ -13,12 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("./express"));
-const db_1 = __importDefault(require("./db"));
+const dependencyInjector_1 = __importDefault(require("./dependencyInjector"));
 exports.default = ({ expressApp }) => __awaiter(void 0, void 0, void 0, function* () {
-    const dbConnection = yield db_1.default();
-    console.log("DB Initialized");
     yield express_1.default({ app: expressApp });
     console.log("Express Initialized");
+    yield dependencyInjector_1.default();
+    console.log("Dependencies Initialized");
     // ... more loaders can be here
     // ... Initialize agenda
     // ... or Redis, or whatever you want

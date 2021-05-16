@@ -5,5 +5,5 @@ export default () => {
 	const app = Router();
 	question(app);
 
-	return app
-}
+	return app;
+};

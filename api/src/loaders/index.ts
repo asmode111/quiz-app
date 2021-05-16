@@ -1,11 +1,12 @@
 import expressLoader from "./express";
-import dbLoader from "./db";
+import dependencyInjectorLoader from "./dependencyInjector";
 
 export default async ({ expressApp }) => {
-  const dbConnection = await dbLoader();
-  console.log("DB Initialized");
+  
   await expressLoader({ app: expressApp });
   console.log("Express Initialized");
+  await dependencyInjectorLoader();
+  console.log("Dependencies Initialized");
 
   // ... more loaders can be here
 

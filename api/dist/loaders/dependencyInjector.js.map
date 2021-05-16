@@ -1,0 +1,1 @@
+{"version":3,"file":"dependencyInjector.js","sourceRoot":"","sources":["../../src/loaders/dependencyInjector.ts"],"names":[],"mappings":";;AAAA,mCAAmC;AACnC,6BAAoC;AAEpC,MAAM,YAAY,GAAG,kBAAS,CAAC,GAAG,CAAC,iBAAY,CAAC,CAAC;AAEjD,kBAAe,GAAG,EAAE;IAClB,MAAM,UAAU,GAAG,YAAY,CAAC,aAAa,EAAE,CAAC;IAChD,kBAAS,CAAC,GAAG,CAAC,cAAc,EAAE,UAAU,CAAC,CAAC;AAC5C,CAAC,CAAC"}

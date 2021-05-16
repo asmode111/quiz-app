@@ -13,22 +13,22 @@ services:
       - ./db:/db
     networks:
       - zend_cert
-  app:
-    container_name: zend_cert_app
-    build:
-      context: ./
-      dockerfile: docker/Dockerfile-app
-    volumes:
-      - /app/node_modules
-      - ./app:/app:delegated
-    ports:
-      - "8080:3000"
-    links:
-      - api
-    stdin_open: true
-    tty: true
-    networks:
-      - zend_cert
+  # app:
+  #   container_name: zend_cert_app
+  #   build:
+  #     context: ./
+  #     dockerfile: docker/Dockerfile-app
+  #   volumes:
+  #     - /app/node_modules
+  #     - ./app:/app:delegated
+  #   ports:
+  #     - "8080:3000"
+  #   links:
+  #     - api
+  #   stdin_open: true
+  #   tty: true
+  #   networks:
+  #     - zend_cert
 networks:
   zend_cert:
     driver: bridge

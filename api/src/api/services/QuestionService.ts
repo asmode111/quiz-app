@@ -1,15 +1,16 @@
 import { QuestionRepository } from "../repositories/QuestionRepository";
+import { Service } from "typedi";
 
-const questionRepository = new QuestionRepository();
-
+@Service()
 class QuestionService {
-    public getFirstQuestion(db: any, callback: (row: any) => void): any  {
-      return questionRepository.getFirstQuestion(db, callback);
-    }
-  
-    public getNextQuestion (db: any, questionId: number, callback: (row: any) => void): any {
-      return questionRepository.getNextQuestion(db, questionId, callback);
-    }
+  constructor(private readonly questionRepository: QuestionRepository) { }
+  public getFirstQuestion(callback: (row: any) => void): any  {
+    return this.questionRepository.getFirstQuestion(callback);
   }
+
+  public getNextQuestion (questionId: number, callback: (row: any) => void): any {
+    return this.questionRepository.getNextQuestion(questionId, callback);
+  }
+}
   
-  export { QuestionService };
+export { QuestionService };
