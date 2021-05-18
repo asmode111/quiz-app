@@ -1,9 +1,19 @@
 # Running APP
 
-An experimental project for managing PHP Zend Certification.
+An experimental project for managing Question/Answer APP.
 
 Built with [Node](https://nodejs.org) stack.
 Handling the frontend with [React](https://reactjs.org).
+
+### Tech stack
+
+- Nodejs
+
+- ReactJS
+
+- Typescript
+
+- SQL Lite
 
 ### Run the project
 

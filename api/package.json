@@ -1,7 +1,7 @@
 {
-  "name": "zend-certification",
+  "name": "qa-app",
   "version": "1.0.0",
-  "description": "Zend Certification APP",
+  "description": "Q/A APP",
   "main": "src/app.ts",
   "scripts": {
     "start": "yarn run eslint 'src/**' && tsc && nodemon",

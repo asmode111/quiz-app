@@ -13,11 +13,11 @@ function stop() {
 }
 
 function app() {
-    docker exec -it zend_cert_app /bin/bash
+    docker exec -it qa_app /bin/bash
 }
 
 function api() {
-    docker exec -it zend_cert_api /bin/bash
+    docker exec -it qa_api /bin/bash
 }
 
 "$@"
