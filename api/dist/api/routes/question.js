@@ -8,14 +8,14 @@ const QuestionService_1 = require("../services/QuestionService");
 const questionService = typedi_1.default.get(QuestionService_1.QuestionService);
 exports.default = (app) => {
     app.get("/question", (request, response) => {
-        questionService.getFirstQuestion(function (row) {
-            response.status(200).send(row).end();
+        questionService.getFirstQuestion(function (result) {
+            response.status(200).send(result).end();
         });
     });
     app.get("/question/:id", (request, response) => {
         const questionId = +request.params.id;
-        questionService.getNextQuestion(questionId, function (row) {
-            response.status(200).send(row).end();
+        questionService.getNextQuestion(questionId, function (result) {
+            response.status(200).send(result).end();
         });
     });
 };

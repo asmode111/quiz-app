@@ -17,10 +17,18 @@ let QuestionService = class QuestionService {
         this.questionRepository = questionRepository;
     }
     getFirstQuestion(callback) {
-        return this.questionRepository.getFirstQuestion(callback);
+        this.questionRepository.getFirstQuestion(function (result) {
+            this.getCorrectAnswer(result.correct_answer);
+            callback(result);
+        });
     }
     getNextQuestion(questionId, callback) {
         return this.questionRepository.getNextQuestion(questionId, callback);
+    }
+    getCorrectAnswer(correctAnswers) {
+        // return correctAnswers.trim().split('');
+        console.log(correctAnswers);
+        return correctAnswers;
     }
 };
 QuestionService = __decorate([

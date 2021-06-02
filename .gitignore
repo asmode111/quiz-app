@@ -5,3 +5,4 @@ app/var/cache/*
 app/var/log/*
 db
 .DS_Store
+.history

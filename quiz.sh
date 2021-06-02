@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function start() {
-    docker-compose up -d
+    docker-compose up
 }
 
 function build() {
