@@ -7,27 +7,27 @@ class QuestionService {
   constructor(private readonly questionRepository: QuestionRepository) { }
 
   public getFirstQuestion(callback: (row: any) => void): any  {
-    let self = this;
+    const that = this;
     this.questionRepository.getFirstQuestion(function(result) {
       
-      result.correct_answer = self.prepareCorrectAnswer(result.correct_answer);
+      result.correct_answer = that.prepareCorrectAnswer(result.correct_answer);
 
       callback(result);
     });
   }
 
   public getNextQuestion (questionId: number, callback: (row: any) => void): any {
-    let self = this;
+    const that = this;
     this.questionRepository.getNextQuestion(questionId, function(result) {
       
-      result.correct_answer = self.prepareCorrectAnswer(result.correct_answer);
+      result.correct_answer = that.prepareCorrectAnswer(result.correct_answer);
 
       callback(result);
     });
   }
 
-  private prepareCorrectAnswer(correctAnswers): any {
-    return correctAnswers.trim().split('');
+  private prepareCorrectAnswer(correctAnswers: string): any {
+    return correctAnswers.trim().split("");
   }
 }
   
