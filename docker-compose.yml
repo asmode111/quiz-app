@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   api:
-    container_name: qa_api
+    container_name: quiz_api
     build:
       context: ./
       dockerfile: docker/Dockerfile-api
@@ -12,9 +12,9 @@ services:
       - ./api:/api:delegated
       - ./db:/db
     networks:
-      - qa
+      - quiz
   app:
-    container_name: qa_app
+    container_name: quiz_app
     build:
       context: ./
       dockerfile: docker/Dockerfile-app
@@ -28,7 +28,7 @@ services:
     stdin_open: true
     tty: true
     networks:
-      - qa
+      - quiz
 networks:
-  qa:
+  quiz:
     driver: bridge

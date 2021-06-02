@@ -1,6 +1,6 @@
 # Running APP
 
-An experimental project for managing Question/Answer APP.
+An experimental project for a quiz app.
 
 Built with [Node](https://nodejs.org) stack.
 Handling the frontend with [React](https://reactjs.org).
@@ -18,8 +18,8 @@ Handling the frontend with [React](https://reactjs.org).
 ### Run the project
 
 ```
-./app.sh build
-./app.sh start
+./quiz.sh build
+./quiz.sh start
 ```
 
 Run API
