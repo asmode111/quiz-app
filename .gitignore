@@ -6,3 +6,4 @@ app/var/log/*
 db
 .DS_Store
 .history
+dist
