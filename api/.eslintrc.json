@@ -19,7 +19,6 @@
     "rules": {
         "semi": ["error", "always"],
         "quotes": ["error", "double"],
-        "@typescript-eslint/no-var-requires": 0,
-        "consistent-this": [2, "that"]
+        "@typescript-eslint/no-var-requires": 0
     }
 }

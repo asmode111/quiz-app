@@ -7,20 +7,18 @@ class QuestionService {
   constructor(private readonly questionRepository: QuestionRepository) { }
 
   public getFirstQuestion(callback: (row: any) => void): any  {
-    const that = this;
-    this.questionRepository.getFirstQuestion(function(result) {
+    this.questionRepository.getFirstQuestion((result) => {
       
-      result.correct_answer = that.prepareCorrectAnswer(result.correct_answer);
+      result.correct_answer = this.prepareCorrectAnswer(result.correct_answer);
 
       callback(result);
     });
   }
 
   public getNextQuestion (questionId: number, callback: (row: any) => void): any {
-    const that = this;
-    this.questionRepository.getNextQuestion(questionId, function(result) {
+    this.questionRepository.getNextQuestion(questionId, (result) => {
       
-      result.correct_answer = that.prepareCorrectAnswer(result.correct_answer);
+      result.correct_answer = this.prepareCorrectAnswer(result.correct_answer);
 
       callback(result);
     });

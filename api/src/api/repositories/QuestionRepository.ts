@@ -3,7 +3,7 @@ import { DbConnection } from "../../loaders/db";
 
 @Service()
 class QuestionRepository {
-  connection;
+  private connection : any;
   constructor(private readonly dbConnection: DbConnection) {
     this.connection = this.dbConnection.getConnection();
   }
