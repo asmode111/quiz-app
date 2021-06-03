@@ -8,24 +8,37 @@ class QuestionService {
 
   public getFirstQuestion(callback: (row: any) => void): any  {
     this.questionRepository.getFirstQuestion((result) => {
-      
-      result.correct_answer = this.prepareCorrectAnswer(result.correct_answer);
-
-      callback(result);
+      callback(this.prepareResult(result));
     });
   }
 
   public getNextQuestion (questionId: number, callback: (row: any) => void): any {
     this.questionRepository.getNextQuestion(questionId, (result) => {
-      
-      result.correct_answer = this.prepareCorrectAnswer(result.correct_answer);
-
-      callback(result);
+      callback(this.prepareResult(result));
     });
   }
 
-  private prepareCorrectAnswer(correctAnswers: string): any {
+  private prepareResult(result: any): any {
+    result.correct_answers = this.prepareCorrectAnswer(result.correct_answer);
+    result.answers = this.prepareAnswers(result.answers);
+    result = this.unsetUnnecessaryFields(result);
+
+    return result;
+  }
+  
+  private prepareCorrectAnswer(correctAnswers: string): object {
     return correctAnswers.trim().split("");
+  }
+  
+  private prepareAnswers(answers: string): object {
+    return JSON.parse(answers);
+  }
+  
+  private unsetUnnecessaryFields(result: object): object {
+    delete result["question_body"];
+    delete result["correct_answer"];
+
+    return result;
   }
 }
   

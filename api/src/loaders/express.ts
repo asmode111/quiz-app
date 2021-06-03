@@ -6,6 +6,8 @@ import apiRoutes from "../api";
 import config from "../config";
 // import * as bodyParser from "body-parser";
 
+var allowlist = ['http://localhost:8080/']
+
 export default async ({ app }: { app: express.Application }) => {
   app.use(compression());
   app.get("/status", (req, res) => { 
@@ -17,11 +19,12 @@ export default async ({ app }: { app: express.Application }) => {
     res.status(200).end();
   });
   app.enable("trust proxy");
-
-  // Load API routes
+  app.use(cors({
+    'origin': 'http://localhost:8080',
+    'methods': 'GET,POST',
+  }));
   app.use(config.api.prefix, apiRoutes());
-
-  app.use(cors());
+  
   // app.use(require("morgan")("dev"));
   // app.use(bodyParser.urlencoded({ extended: false }));
 
