@@ -6,8 +6,6 @@ import apiRoutes from "../api";
 import config from "../config";
 // import * as bodyParser from "body-parser";
 
-var allowlist = ['http://localhost:8080/']
-
 export default async ({ app }: { app: express.Application }) => {
   app.use(compression());
   app.get("/status", (req, res) => { 
@@ -20,8 +18,8 @@ export default async ({ app }: { app: express.Application }) => {
   });
   app.enable("trust proxy");
   app.use(cors({
-    'origin': 'http://localhost:8080',
-    'methods': 'GET,POST',
+    "origin": "http://localhost:8080",
+    "methods": "GET,POST",
   }));
   app.use(config.api.prefix, apiRoutes());
   

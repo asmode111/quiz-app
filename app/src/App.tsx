@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-import Question from './question';
+import Quiz from './quiz';
 
 interface IQuestion {
   id: number;
@@ -49,7 +49,7 @@ function App() {
     // });
   }, []);
 
-  return <Question question={question}></Question>
+  return <Quiz question={question}></Quiz>
 }
 
 export default App;

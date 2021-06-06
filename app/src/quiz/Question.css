@@ -72,12 +72,14 @@ body {
   transition: 300ms ease-in-out 0s;
 }
 
-.options input[type="radio"]:checked ~ .checkmark {
+.options input[type="radio"]:checked ~ .checkmark,
+.options input[type="checkbox"]:checked ~ .checkmark {
   background: #21bf73;
   transition: 300ms ease-in-out 0s;
 }
 
-.options input[type="radio"]:checked ~ .checkmark:after {
+.options input[type="radio"]:checked ~ .checkmark:after,
+.options input[type="checkbox"]:checked ~ .checkmark:after {
   transform: translate(-50%, -50%) scale(1);
 }
 

@@ -26,15 +26,15 @@ class QuestionService {
     return result;
   }
   
-  private prepareCorrectAnswer(correctAnswers: string): object {
+  private prepareCorrectAnswer(correctAnswers: string): any {
     return correctAnswers.trim().split("");
   }
   
-  private prepareAnswers(answers: string): object {
+  private prepareAnswers(answers: string): any {
     return JSON.parse(answers);
   }
   
-  private unsetUnnecessaryFields(result: object): object {
+  private unsetUnnecessaryFields(result: any): any {
     delete result["question_body"];
     delete result["correct_answer"];
 
