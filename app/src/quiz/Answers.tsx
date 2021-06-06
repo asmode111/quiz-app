@@ -6,35 +6,37 @@ import Col from 'react-bootstrap/Col';
 
 function Answers(props: any) {
 
-  let [selectedAnswers, setSelectedAnswers]: [any, (question: any) => void] = React.useState([]);
+  const [selectedAnswers, setSelectedAnswers]: [any, (selectedAnswers: any) => void] = React.useState([]);
+  const isMultiple = props.correctAnswers.length > 1;
 
   function handleAnswerChange(e: any) {
-    if (e.target.checked) {
-      selectedAnswers.push(e.target.value);
-      setSelectedAnswers(selectedAnswers);
+    let _selectedAnswers = selectedAnswers;
+    if (isMultiple) {
+      if (e.target.checked) {
+        _selectedAnswers.push(e.target.value);
+      } else {
+        _selectedAnswers = selectedAnswers.filter(function(ele: string){ 
+          return ele != e.target.value;
+        });
+      }
     } else {
-      selectedAnswers = selectedAnswers.filter(function(ele: string){ 
-        return ele != e.target.value;
-      });
-      setSelectedAnswers(selectedAnswers);
+      _selectedAnswers = [e.target.value];
     }
-
-    console.log("selectedAnswers", selectedAnswers);
+    
+    setSelectedAnswers(_selectedAnswers);
+    props.onSelectedAnswersChange(_selectedAnswers);
   }
 
 
-  const answers = []
-  const isMultiple = false;
-  // const isMultiple = props.correctAnswers.length > 1;
-
+  const answers = [];
   for (const [key, answer] of Object.entries(props.answers)) {
     if (answer === null) {
       continue;
     }
 
-    let answerElement = <input type="radio" onChange={handleAnswerChange} value={key} name="selectedAnswers" />
+    let answerElement = <input type="radio" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
     if (isMultiple) {
-      answerElement = <input type="checkbox" onChange={handleAnswerChange} value={key} name="selectedAnswers" />
+      answerElement = <input type="checkbox" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
     }
 
     answers.push(
@@ -45,7 +47,7 @@ function Answers(props: any) {
           <span className="checkmark"></span> 
         </label> 
       </Row>
-    )
+    );
   }
 
   return (

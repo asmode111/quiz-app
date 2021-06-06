@@ -10,4 +10,4 @@ COPY /app/public ./public/
 
 RUN yarn install
 
-CMD ["yarn", "run", "start"]
+CMD ["yarn", "start"]

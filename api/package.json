@@ -4,9 +4,9 @@
   "description": "Quiz APP",
   "main": "src/app.ts",
   "scripts": {
-    "start": "yarn run eslint 'src/**' && tsc && nodemon",
+    "start": "yarn lint && yarn build && nodemon",
     "build": "tsc",
-    "lint": "yarn run eslint 'src/**'",
+    "lint": "yarn run eslint 'src/**' --fix",
     "test": "echo  \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
