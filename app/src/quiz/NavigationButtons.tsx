@@ -11,7 +11,12 @@ function NavigationButtons(props: any) {
         {/* <Col id="prev"> 
             <Button variant="primary">Previous</Button>{' '}
         </Col> */}
-          <Button onClick={props.onNextClick} variant="success">Next</Button>
+        {
+          !props.isAnswered && <Button onClick={props.onAnswerClick} variant="success">Answer</Button>
+        }
+        {
+          props.isAnswered && <Button onClick={props.onNextClick} variant="warning">Next</Button>
+        }
       </Row>
     </Container>
   );

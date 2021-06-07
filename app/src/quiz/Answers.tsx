@@ -3,13 +3,13 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Alert from 'react-bootstrap/Alert';
 
 function Answers(props: any) {
-
   const [selectedAnswers, setSelectedAnswers]: [any, (selectedAnswers: any) => void] = React.useState([]);
   const isMultiple = props.correctAnswers.length > 1;
 
-  function handleAnswerChange(e: any) {
+  const handleAnswerChange = (e: any) => {
     let _selectedAnswers = selectedAnswers;
     if (isMultiple) {
       if (e.target.checked) {
@@ -25,7 +25,7 @@ function Answers(props: any) {
     
     setSelectedAnswers(_selectedAnswers);
     props.onSelectedAnswersChange(_selectedAnswers);
-  }
+  };
 
 
   const answers = [];
@@ -53,6 +53,16 @@ function Answers(props: any) {
   return (
     <Container>
       <Col>
+        {
+          props.answerResult.isAnswered 
+            && <Row className="question pt-2">
+                <Alert 
+                key="ansewrResult" 
+                variant={props.answerResult.isCorrect ? 'success' : 'danger'}>
+                  {props.answerResult.message}
+                </Alert>
+              </Row>
+        }
         <Row className="question ml-sm-5 pl-sm-5 pt-2">
             <Col className="py-2 h5">Q. {props.question}</Col>
         </Row>
