@@ -7,7 +7,7 @@ function NavigationButtons(props: any) {
   return (
     <Row>
       {
-        !props.isAnswered && <Button onClick={props.onAnswerClick} className="btn-lg btn-block" variant="success">Answer</Button>
+        !props.isAnswered && <Button onClick={props.onAnswerClick} disabled={!props.isAnswerSelected} className="btn-lg btn-block" variant="success">Answer</Button>
       }
       {
         props.isAnswered && <Button onClick={props.onNextClick} className="btn-lg btn-block" variant="warning">Next</Button>

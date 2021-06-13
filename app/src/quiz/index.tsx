@@ -47,6 +47,7 @@ function Quiz() {
   const [question, setQuestion]: [IQuestion, (question: IQuestion) => void] = React.useState(getEmptyQuestion());
   const [selectedAnswers, setSelectedAnswers]: [any, (selectedAnswers: any) => void] = React.useState([]);
   const [answerResult, setAnswerResult]: [IAnswerResult, (answerResult: IAnswerResult) => void] = React.useState(getEmptyAnswerResult());
+  const [isAnswerSelected, setIsAnswerSelected]: [boolean, (isAnswerSelected: boolean) => void] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     axios.get<IQuestion>('http://localhost:8081/api/question', {
@@ -96,6 +97,7 @@ function Quiz() {
       setQuestion(response.data);
       setAnswerResult(getEmptyAnswerResult());
       setSelectedAnswers([]);
+      setIsAnswerSelected(false);
       // setLoading(false);
     });
     // .catch(ex => {
@@ -121,14 +123,20 @@ function Quiz() {
       </Row>
       <Row>
         <Answers 
+          questionId={question.id}
           answers={question.answers}
           correctAnswers={question.correct_answers}
-          onSelectedAnswersChange={(selectedAnswers: any) => { setSelectedAnswers(selectedAnswers);} }
+          onSelectedAnswersChange={(selectedAnswers: any) => { 
+            setSelectedAnswers(selectedAnswers); 
+            setIsAnswerSelected(true);
+          }}
+          isAnswered={answerResult.isAnswered}
         />
       </Row>
       <Row>
         <NavigationButtons 
-          isAnswered={answerResult.isAnswered} 
+          isAnswered={answerResult.isAnswered}
+          isAnswerSelected={isAnswerSelected}
           onAnswerClick={() => {checkAnswer();}} 
           onNextClick={() => {getNextQuestion();}} 
         />

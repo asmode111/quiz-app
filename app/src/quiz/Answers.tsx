@@ -6,7 +6,6 @@ import Col from 'react-bootstrap/Col';
 function Answers(props: any) {
   const [selectedAnswers, setSelectedAnswers]: [any, (selectedAnswers: any) => void] = React.useState([]);
   const isMultiple = props.correctAnswers.length > 1;
-  console.log(props.questionBody);
 
   const handleAnswerChange = (e: any) => {
     let _selectedAnswers = selectedAnswers;
@@ -21,11 +20,9 @@ function Answers(props: any) {
     } else {
       _selectedAnswers = [e.target.value];
     }
-    
     setSelectedAnswers(_selectedAnswers);
     props.onSelectedAnswersChange(_selectedAnswers);
   };
-
 
   const answers = [];
   for (const [key, answer] of Object.entries(props.answers)) {
@@ -33,9 +30,10 @@ function Answers(props: any) {
       continue;
     }
 
-    let answerElement = <input type="radio" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
+    const elementKey = props.questionId + key;
+    let answerElement = <input key={elementKey} disabled={props.isAnswered} type="radio" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
     if (isMultiple) {
-      answerElement = <input type="checkbox" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
+      answerElement = <input key={elementKey} disabled={props.isAnswered} type="checkbox" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
     }
 
     answers.push(

@@ -22,17 +22,16 @@
         "semi": ["error", "always"],
         "quotes": ["error", "single"],
         "@typescript-eslint/no-var-requires": 0,
-        "import/no-unresolved": "error"
+        "import/no-unresolved": "error",
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off"
     },
     "settings": {
         "import/parsers": {
           "@typescript-eslint/parser": [".ts", ".tsx"]
         },
         "import/resolver": {
-          "typescript": {
-            "alwaysTryTypes": true,    
-            "project": "tsconfig.json"
-          }
+          "typescript": {}
         }
     }
 }

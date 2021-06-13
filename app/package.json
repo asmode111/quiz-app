@@ -24,7 +24,7 @@
   },
   "scripts": {
     "watch": "npm-watch",
-    "start": "yarn run eslint 'src/**/*.{js,ts,tsx}' --fix && tsc && react-scripts start",
+    "start": "./node_modules/.bin/eslint 'src/**/*.{js,ts,tsx}' --fix && tsc && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^4.26.0",
+    "eslint": "^7.28.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.23.4"
   }
