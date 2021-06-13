@@ -23,10 +23,6 @@ body {
   font-size: 32px;
 }
 
-.question {
-  width: 75%;
-}
-
 .options {
   position: relative;
   padding-left: 40px;
@@ -97,11 +93,4 @@ body {
 .btn-success {
   padding: 5px 25px;
   background-color: #21bf73;
-}
-
-@media (max-width: 576px) {
-  .question {
-    width: 100%;
-    word-spacing: 2px;
-  }
 }

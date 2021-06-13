@@ -3,17 +3,18 @@ import axios from 'axios';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 import NavigationButtons from './NavigationButtons';
+import Question from './Question';
 import Answers from './Answers';
+import AnswerAlert from './AnswerAlert';
 
 import './Quiz.css';
 
 interface IQuestion {
   id: number;
   question: string;
-  question_raw: string;
+  question_body: string;
   answers: any;
   correct_answers: any;
 }
@@ -28,7 +29,7 @@ function getEmptyQuestion(): IQuestion {
   return {
     id: 0,
     question: '',
-    question_raw: '',
+    question_body: '',
     answers: {},
     correct_answers: {}
   };
@@ -42,7 +43,7 @@ function getEmptyAnswerResult(): IAnswerResult {
   };
 }
 
-function Question() {
+function Quiz() {
   const [question, setQuestion]: [IQuestion, (question: IQuestion) => void] = React.useState(getEmptyQuestion());
   const [selectedAnswers, setSelectedAnswers]: [any, (selectedAnswers: any) => void] = React.useState([]);
   const [answerResult, setAnswerResult]: [IAnswerResult, (answerResult: IAnswerResult) => void] = React.useState(getEmptyAnswerResult());
@@ -110,24 +111,30 @@ function Question() {
   return (
     <Container fluid className="container mt-5">
       <Row>
-        <Col md={2}></Col>
-        <Col>
-          <Answers 
-            question={question.question}
-            answers={question.answers}
-            correctAnswers={question.correct_answers}
-            onSelectedAnswersChange={(selectedAnswers: any) => { setSelectedAnswers(selectedAnswers);} }
-            answerResult={answerResult}
-          />
-          <NavigationButtons 
-            isAnswered={answerResult.isAnswered} 
-            onAnswerClick={() => {checkAnswer();}} 
-            onNextClick={() => {getNextQuestion();}} 
-          />
-        </Col>
+        <AnswerAlert answerResult={answerResult}></AnswerAlert>
+      </Row>
+      <Row>
+        <Question
+          question={question.question}
+          questionBody={question.question_body}>
+        </Question>
+      </Row>
+      <Row>
+        <Answers 
+          answers={question.answers}
+          correctAnswers={question.correct_answers}
+          onSelectedAnswersChange={(selectedAnswers: any) => { setSelectedAnswers(selectedAnswers);} }
+        />
+      </Row>
+      <Row>
+        <NavigationButtons 
+          isAnswered={answerResult.isAnswered} 
+          onAnswerClick={() => {checkAnswer();}} 
+          onNextClick={() => {getNextQuestion();}} 
+        />
       </Row>
     </Container>
   );
 }
 
-export default Question;
+export default Quiz;

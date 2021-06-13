@@ -35,7 +35,7 @@ class QuestionService {
   }
   
   private unsetUnnecessaryFields(result: any): any {
-    delete result["question_body"];
+    delete result["question_raw"];
     delete result["correct_answer"];
 
     return result;
