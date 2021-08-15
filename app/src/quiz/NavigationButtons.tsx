@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 
-function NavigationButtons(props: any) {
+function NavigationButtons(props: any): ReactElement {
   return (
     <Row>
       {

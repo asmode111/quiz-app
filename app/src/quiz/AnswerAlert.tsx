@@ -1,22 +1,22 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 
-function AnswerAlert(props: any) {
+function AnswerAlert(props: any): ReactElement {
 
   if (!props.answerResult.isAnswered) {
-    return (null);
+    return <Col></Col>;
   }
 
   return (
     <Col>
       <Row className="pt-2">
-        <Alert 
-          key="ansewrResult" 
+        <Alert
+          key="ansewrResult"
           variant={props.answerResult.isCorrect ? 'success' : 'danger'}>
-            {props.answerResult.message}
+          {props.answerResult.message}
         </Alert>
       </Row>
     </Col>

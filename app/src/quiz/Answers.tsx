@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { ReactElement, ChangeEvent } from 'react';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-function Answers(props: any) {
-  const [selectedAnswers, setSelectedAnswers]: [any, (selectedAnswers: any) => void] = React.useState([]);
+import { IAnswersProps } from './interfaces/IAnswersProps';
+
+function Answers(props: IAnswersProps): ReactElement {
+  const [selectedAnswers, setSelectedAnswers] = React.useState<any>([]);
   const isMultiple = props.correctAnswers.length > 1;
 
-  const handleAnswerChange = (e: any) => {
+  const handleAnswerChange = (e: ChangeEvent<HTMLInputElement>): void => {
     let _selectedAnswers = selectedAnswers;
     if (isMultiple) {
       if (e.target.checked) {
         _selectedAnswers.push(e.target.value);
       } else {
-        _selectedAnswers = selectedAnswers.filter(function(ele: string){ 
+        _selectedAnswers = selectedAnswers.filter(function (ele: string) {
           return ele != e.target.value;
         });
       }
@@ -41,8 +43,8 @@ function Answers(props: any) {
         <label className="options">
           {answer}
           {answerElement}
-          <span className="checkmark"></span> 
-        </label> 
+          <span className="checkmark"></span>
+        </label>
       </Row>
     );
   }
