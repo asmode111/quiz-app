@@ -35,3 +35,14 @@ export const loadNextQuestion = (questionId: number, callback: (row: any) => voi
     callback(response.data);
   });
 };
+
+export const getTotalQuestionCount = (callback: (row: any) => void): void => {
+  axios.get<number>('http://localhost:8081/api/total-question-count', {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    timeout: 1000
+  }).then(response => {
+    callback(response.data);
+  });
+};

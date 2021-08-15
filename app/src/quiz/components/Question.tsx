@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 
-import { IQuestionProps } from './interfaces/IQuestionProps';
+import { IQuestionProps } from '../interfaces/IQuestionProps';
 
 function Question(props: IQuestionProps): ReactElement {
   return (

@@ -3,17 +3,25 @@ import React, { ReactElement } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
-import NavigationButtons from './NavigationButtons';
-import Question from './Question';
-import Answers from './Answers';
-import AnswerAlert from './AnswerAlert';
+import NavigationButtons from './components/NavigationButtons';
+import Question from './components/Question';
+import Answers from './components/Answers';
+import AnswerAlert from './components/AnswerAlert';
+import Info from './components/Info';
 
 import { IQuestion } from './interfaces/IQuestion';
 import { IAnswerResult } from './interfaces/IAnswerResult';
 
-import { getCurrentQuestion, loadNextQuestion } from './services/QuestionService';
+import { getCurrentQuestion, loadNextQuestion, getTotalQuestionCount } from './services/QuestionService';
+import {
+  isAnswerCorrect,
+  getCurrentAnsweredQuestionCount,
+  incrementAnsweredQuestionCount,
+  getCorrectAnswersCount,
+  incrementCorrectAnswersCount
+} from './services/AnswerService';
 
-import './Quiz.css';
+import './assets/Quiz.css';
 
 function getEmptyAnswerResult(): IAnswerResult {
   return {
@@ -28,11 +36,21 @@ function Quiz(): ReactElement {
   const [selectedAnswers, setSelectedAnswers] = React.useState<any>([]);
   const [answerResult, setAnswerResult] = React.useState<IAnswerResult>(getEmptyAnswerResult());
   const [isAnswerSelected, setIsAnswerSelected]: [boolean, (isAnswerSelected: boolean) => void] = React.useState<boolean>(false);
+  const [totalQuestionCount, setTotalQuestionCount]: [number, (totalQuestionCount: number) => void] = React.useState<number>(0);
+  const [answeredQuestionCount, setAnsweredQuestionCount]: [number, (answeredQuestionCount: number) => void] = React.useState<number>(0);
+  const [correctAnswersCount, setCorrectAnswersCount]: [number, (correctAnswersCount: number) => void] = React.useState<number>(0);
 
   React.useEffect(() => {
     getCurrentQuestion(function (currentQuestion) {
       setQuestion(currentQuestion);
     });
+
+    getTotalQuestionCount(function (totalQuestionCount) {
+      setTotalQuestionCount(totalQuestionCount);
+    });
+
+    setAnsweredQuestionCount(getCurrentAnsweredQuestionCount());
+    setCorrectAnswersCount(getCorrectAnswersCount());
   }, []);
 
   const checkAnswer = () => {
@@ -40,8 +58,9 @@ function Quiz(): ReactElement {
       return;
     }
 
-    const intersection = selectedAnswers.filter((x: string) => !question.correct_answers.includes(x));
-    if (selectedAnswers.length !== question.correct_answers.length || intersection.length != 0) {
+    setAnsweredQuestionCount(incrementAnsweredQuestionCount());
+
+    if (isAnswerCorrect(selectedAnswers, question.correct_answers)) {
       setAnswerResult({
         isAnswered: true,
         isCorrect: false,
@@ -49,6 +68,8 @@ function Quiz(): ReactElement {
       });
       return;
     }
+
+    setCorrectAnswersCount(incrementCorrectAnswersCount());
 
     setAnswerResult({
       isAnswered: true,
@@ -72,6 +93,13 @@ function Quiz(): ReactElement {
 
   return (
     <Container fluid className="container mt-5">
+      <Row>
+        <Info
+          totalQuestionCount={totalQuestionCount}
+          answeredQuestionCount={answeredQuestionCount}
+          correctAnswersCount={correctAnswersCount}
+        />
+      </Row>
       <Row>
         <AnswerAlert answerResult={answerResult}></AnswerAlert>
       </Row>
