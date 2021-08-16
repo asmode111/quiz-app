@@ -11,6 +11,13 @@ export default (app: Router) => {
     });
   });
 
+  app.get("/question/random", (request: Request, response: Response) => {
+    const excludedQuestionIds: any = request.query.excludedQuestionIds;
+    questionService.getRandomQuestion(excludedQuestionIds, function (result) {
+      response.status(200).send(result).end();
+    });
+  });
+
   app.get("/question/:id", (request: Request, response: Response) => {
     const questionId: number = +request.params.id;
     questionService.getNextQuestion(questionId, function (result) {

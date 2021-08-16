@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import React, { ReactElement } from 'react';
 
 import Quiz from './quiz';

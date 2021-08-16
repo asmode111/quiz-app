@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { Container as ServiceContainer } from 'typedi';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -9,17 +10,14 @@ import Answers from './components/Answers';
 import AnswerAlert from './components/AnswerAlert';
 import Info from './components/Info';
 
+import { QuestionService } from './services/QuestionService';
+const questionService = ServiceContainer.get(QuestionService);
+
+import { AnswerService } from './services/AnswerService';
+const answerService = ServiceContainer.get(AnswerService);
+
 import { IQuestion } from './interfaces/IQuestion';
 import { IAnswerResult } from './interfaces/IAnswerResult';
-
-import { getCurrentQuestion, loadNextQuestion, getTotalQuestionCount } from './services/QuestionService';
-import {
-  isAnswerCorrect,
-  getCurrentAnsweredQuestionCount,
-  incrementAnsweredQuestionCount,
-  getCorrectAnswersCount,
-  incrementCorrectAnswersCount
-} from './services/AnswerService';
 
 import './assets/Quiz.css';
 
@@ -41,16 +39,22 @@ function Quiz(): ReactElement {
   const [correctAnswersCount, setCorrectAnswersCount]: [number, (correctAnswersCount: number) => void] = React.useState<number>(0);
 
   React.useEffect(() => {
-    getCurrentQuestion(function (currentQuestion) {
-      setQuestion(currentQuestion);
+    questionService.getCurrentQuestion(function (currentQuestion) {
+      if (currentQuestion) {
+        setQuestion(currentQuestion);
+      } else {
+        questionService.getRandomQuestion(function (currentQuestion) {
+          setQuestion(currentQuestion);
+        });
+      }
     });
 
-    getTotalQuestionCount(function (totalQuestionCount) {
+    questionService.getTotalQuestionCount(function (totalQuestionCount) {
       setTotalQuestionCount(totalQuestionCount);
     });
 
-    setAnsweredQuestionCount(getCurrentAnsweredQuestionCount());
-    setCorrectAnswersCount(getCorrectAnswersCount());
+    setAnsweredQuestionCount(questionService.getAnsweredQuestionsCount());
+    setCorrectAnswersCount(answerService.getCorrectAnswersCount());
   }, []);
 
   const checkAnswer = () => {
@@ -58,9 +62,11 @@ function Quiz(): ReactElement {
       return;
     }
 
-    setAnsweredQuestionCount(incrementAnsweredQuestionCount());
+    setAnsweredQuestionCount(questionService.getAnsweredQuestionsCount());
+    questionService.saveAnsweredQuestion(question.id);
+    questionService.getRandomQuestion(() => ({}));
 
-    if (isAnswerCorrect(selectedAnswers, question.correct_answers)) {
+    if (answerService.isAnswerCorrect(selectedAnswers, question.correct_answers)) {
       setAnswerResult({
         isAnswered: true,
         isCorrect: false,
@@ -69,7 +75,7 @@ function Quiz(): ReactElement {
       return;
     }
 
-    setCorrectAnswersCount(incrementCorrectAnswersCount());
+    setCorrectAnswersCount(answerService.incrementCorrectAnswersCount());
 
     setAnswerResult({
       isAnswered: true,
@@ -83,7 +89,7 @@ function Quiz(): ReactElement {
       return;
     }
 
-    loadNextQuestion(question.id, function (nextQuestion) {
+    questionService.getRandomQuestion(function (nextQuestion) {
       setQuestion(nextQuestion);
       setAnswerResult(getEmptyAnswerResult());
       setSelectedAnswers([]);
