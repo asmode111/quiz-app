@@ -1,11 +1,10 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 
-function AnswerAlert(props: any): ReactElement {
-
+function AnswerResultComponent(props: any): ReactElement {
   if (!props.answerResult.isAnswered) {
     return <Col></Col>;
   }
@@ -23,4 +22,4 @@ function AnswerAlert(props: any): ReactElement {
   );
 }
 
-export default AnswerAlert;
+export default AnswerResultComponent;

@@ -24,6 +24,10 @@ class AnswerService {
 
     return correctAnswersCount;
   }
+
+  public resetData(): void {
+    localStorage.removeItem('quiz_correctAnswersCount');
+  }
 }
 
 export { AnswerService };

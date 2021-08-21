@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 
 import { IAnswersProps } from '../interfaces/IAnswersProps';
 
-function Answers(props: IAnswersProps): ReactElement {
+function AnswersComponent(props: IAnswersProps): ReactElement {
   const [selectedAnswers, setSelectedAnswers] = React.useState<any>([]);
   const isMultiple = props.correctAnswers.length > 1;
 
@@ -59,4 +59,4 @@ function Answers(props: IAnswersProps): ReactElement {
   );
 }
 
-export default Answers;
+export default AnswersComponent;

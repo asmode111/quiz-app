@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -6,7 +6,7 @@ import Alert from 'react-bootstrap/Alert';
 
 import { IQuestionProps } from '../interfaces/IQuestionProps';
 
-function Question(props: IQuestionProps): ReactElement {
+function QuestionComponent(props: IQuestionProps): ReactElement {
   return (
     <Col>
       <Row className="pt-2">
@@ -16,7 +16,9 @@ function Question(props: IQuestionProps): ReactElement {
         && <Row className="pb-2">
           <Col>
             <Alert variant="info">
-              <code>{props.questionBody}</code>
+              <pre>
+                <code>{props.questionBody}</code>
+              </pre>
             </Alert>
           </Col>
         </Row>
@@ -25,4 +27,4 @@ function Question(props: IQuestionProps): ReactElement {
   );
 }
 
-export default Question;
+export default QuestionComponent;

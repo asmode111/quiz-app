@@ -5,6 +5,9 @@ import { IQuestion } from '../interfaces/IQuestion';
 
 @Service()
 class QuestionService {
+
+  private maxQuestionCount = 75;
+
   public getCurrentQuestion(callback: (row: IQuestion | null) => void): void {
     const currentQuestion = localStorage.getItem('quiz_currentQuestion');
     if (currentQuestion) {
@@ -18,15 +21,8 @@ class QuestionService {
     localStorage.setItem('quiz_currentQuestion', JSON.stringify(data));
   }
 
-  public getTotalQuestionCount(callback: (row: any) => void): void {
-    axios.get<number>('http://localhost:8081/api/total-question-count', {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      timeout: 1000
-    }).then(response => {
-      callback(response.data);
-    });
+  public getMaxQuestionCount(): number {
+    return this.maxQuestionCount;
   }
 
   public getRandomQuestion(callback: (row: IQuestion) => void): void {
@@ -73,6 +69,15 @@ class QuestionService {
     const _answeredQuestionIds = JSON.parse(answeredQuestionIds);
 
     return _answeredQuestionIds.length;
+  }
+
+  public isQuizFinished(): boolean {
+    return this.getAnsweredQuestionsCount() >= this.maxQuestionCount;
+  }
+
+  public resetData(): void {
+    localStorage.removeItem('quiz_answeredQuestionIds');
+    localStorage.removeItem('quiz_currentQuestion');
   }
 }
 

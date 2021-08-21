@@ -36,7 +36,7 @@ class QuestionRepository {
   }
 
   public getRandomQuestion(excludedQuestionIds: string, callback: (row: any) => void): void {
-    let sql = `SELECT id, question, question_body, question_raw, answers, correct_answer 
+    const sql = `SELECT id, question, question_body, question_raw, answers, correct_answer 
                 FROM questions 
                 WHERE id NOT IN (` + excludedQuestionIds + `) 
                 ORDER BY RANDOM() 

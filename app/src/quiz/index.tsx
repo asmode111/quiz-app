@@ -4,11 +4,12 @@ import { Container as ServiceContainer } from 'typedi';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
-import NavigationButtons from './components/NavigationButtons';
-import Question from './components/Question';
-import Answers from './components/Answers';
-import AnswerAlert from './components/AnswerAlert';
-import Info from './components/Info';
+import NavigationButtonsComponent from './components/NavigationButtonsComponent';
+import ResetButtonComponent from './components/ResetButtonComponent';
+import QuestionComponent from './components/QuestionComponent';
+import AnswersComponent from './components/AnswersComponent';
+import AnswerResultComponent from './components/AnswerResultComponent';
+import InfoComponent from './components/InfoComponent';
 
 import { QuestionService } from './services/QuestionService';
 const questionService = ServiceContainer.get(QuestionService);
@@ -37,6 +38,7 @@ function Quiz(): ReactElement {
   const [totalQuestionCount, setTotalQuestionCount]: [number, (totalQuestionCount: number) => void] = React.useState<number>(0);
   const [answeredQuestionCount, setAnsweredQuestionCount]: [number, (answeredQuestionCount: number) => void] = React.useState<number>(0);
   const [correctAnswersCount, setCorrectAnswersCount]: [number, (correctAnswersCount: number) => void] = React.useState<number>(0);
+  const [isExamFinished, setIsQuizFinished]: [boolean, (isExamFinished: boolean) => void] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     questionService.getCurrentQuestion(function (currentQuestion) {
@@ -49,9 +51,7 @@ function Quiz(): ReactElement {
       }
     });
 
-    questionService.getTotalQuestionCount(function (totalQuestionCount) {
-      setTotalQuestionCount(totalQuestionCount);
-    });
+    setTotalQuestionCount(questionService.getMaxQuestionCount());
 
     setAnsweredQuestionCount(questionService.getAnsweredQuestionsCount());
     setCorrectAnswersCount(answerService.getCorrectAnswersCount());
@@ -62,8 +62,8 @@ function Quiz(): ReactElement {
       return;
     }
 
-    setAnsweredQuestionCount(questionService.getAnsweredQuestionsCount());
     questionService.saveAnsweredQuestion(question.id);
+    setAnsweredQuestionCount(questionService.getAnsweredQuestionsCount());
     questionService.getRandomQuestion(() => ({}));
 
     if (answerService.isAnswerCorrect(selectedAnswers, question.correct_answers)) {
@@ -89,59 +89,84 @@ function Quiz(): ReactElement {
       return;
     }
 
-    questionService.getRandomQuestion(function (nextQuestion) {
-      setQuestion(nextQuestion);
-      setAnswerResult(getEmptyAnswerResult());
-      setSelectedAnswers([]);
-      setIsAnswerSelected(false);
-    });
+    if (questionService.isQuizFinished()) {
+      setIsQuizFinished(true);
+    } else {
+      questionService.getRandomQuestion(function (nextQuestion) {
+        setQuestion(nextQuestion);
+        setAnswerResult(getEmptyAnswerResult());
+        setSelectedAnswers([]);
+        setIsAnswerSelected(false);
+      });
+    }
   };
+
+  const resetQuiz = () => {
+    const isResetConfirmed = window.confirm('Are you sure to reset the quiz?');
+    if (isResetConfirmed == true) {
+      questionService.resetData();
+      answerService.resetData();
+      questionService.getRandomQuestion(function (currentQuestion) {
+        setQuestion(currentQuestion);
+        setAnswerResult(getEmptyAnswerResult());
+        setAnsweredQuestionCount(0);
+        setCorrectAnswersCount(0);
+        setSelectedAnswers([]);
+        setIsAnswerSelected(false);
+        setIsQuizFinished(false);
+      });
+    }
+  };
+
+  if (isExamFinished) {
+    return (
+      <Container fluid className="container mt-5">
+        <Row>Quiz is over.</Row>
+        <Row>{correctAnswersCount} correct answers out of {totalQuestionCount}.</Row>
+        <ResetButtonComponent onResetClick={() => { resetQuiz(); }} />
+      </Container>
+    );
+  }
 
   return (
     <Container fluid className="container mt-5">
       <Row>
-        <Info
+        <InfoComponent
           totalQuestionCount={totalQuestionCount}
           answeredQuestionCount={answeredQuestionCount}
           correctAnswersCount={correctAnswersCount}
         />
       </Row>
-      <Row>
-        <AnswerAlert answerResult={answerResult}></AnswerAlert>
-      </Row>
+      <AnswerResultComponent answerResult={answerResult} />
       {question !== null &&
-        <Row>
-          <Question
-            question={question.question}
-            questionBody={question.question_body}
-          >{{}}</Question>
-        </Row>
+        <QuestionComponent
+          question={question.question}
+          questionBody={question.question_body}
+        >{{}}</QuestionComponent>
       }
       {question !== null &&
-        <Row>
-          <Answers
-            questionId={question.id}
-            answers={question.answers}
-            correctAnswers={question.correct_answers}
-            isAnswered={answerResult.isAnswered}
-            onSelectedAnswersChange={(selectedAnswers: any) => {
-              setSelectedAnswers(selectedAnswers);
-              setIsAnswerSelected(true);
-            }}
-          />
-        </Row>
+        <AnswersComponent
+          questionId={question.id}
+          answers={question.answers}
+          correctAnswers={question.correct_answers}
+          isAnswered={answerResult.isAnswered}
+          onSelectedAnswersChange={(selectedAnswers: any) => {
+            setSelectedAnswers(selectedAnswers);
+            setIsAnswerSelected(true);
+          }}
+        />
       }
       {answerResult !== null &&
-        <Row>
-          <NavigationButtons
-            isAnswered={answerResult.isAnswered}
-            isAnswerSelected={isAnswerSelected}
-            onAnswerClick={() => { checkAnswer(); }}
-            onNextClick={() => { getNextQuestion(); }}
-          />
-        </Row>
+        <NavigationButtonsComponent
+          isAnswered={answerResult.isAnswered}
+          isAnswerSelected={isAnswerSelected}
+          onAnswerClick={() => { checkAnswer(); }}
+          onNextClick={() => { getNextQuestion(); }}
+        />
       }
-    </Container>
+
+      <ResetButtonComponent onResetClick={() => { resetQuiz(); }}>{{}}</ResetButtonComponent>
+    </Container >
   );
 }
 

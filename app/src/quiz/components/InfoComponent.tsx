@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 
 import { IInfoProps } from '../interfaces/IInfoProps';
 
-function Info(props: IInfoProps): ReactElement {
+function InfoComponent(props: IInfoProps): ReactElement {
   return (
     <Col>
       <Row className="pt-2">
@@ -20,4 +20,4 @@ function Info(props: IInfoProps): ReactElement {
   );
 }
 
-export default Info;
+export default InfoComponent;
