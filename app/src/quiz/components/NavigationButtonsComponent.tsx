@@ -13,7 +13,7 @@ function NavigationButtons(props: any): ReactElement {
             onClick={props.onAnswerClick}
             disabled={props.isAnswered || !props.isAnswerSelected}
             className="btn-block w-100"
-            variant="success">
+            variant="warning">
             Answer
           </Button>
         }
@@ -23,7 +23,7 @@ function NavigationButtons(props: any): ReactElement {
           <Button
             onClick={props.onNextClick}
             className="btn-block w-100"
-            variant="warning">
+            variant="success">
             Next
           </Button>
         }

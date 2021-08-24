@@ -8,7 +8,7 @@ class QuestionService {
 
   private maxQuestionCount = 75;
 
-  public getCurrentQuestion(callback: (row: IQuestion | null) => void): void {
+  public getCurrentQuestion(callback: (currentQuestion: IQuestion | null) => void): void {
     const currentQuestion = localStorage.getItem('quiz_currentQuestion');
     if (currentQuestion) {
       callback(JSON.parse(currentQuestion));

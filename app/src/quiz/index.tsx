@@ -10,12 +10,16 @@ import QuestionComponent from './components/QuestionComponent';
 import AnswersComponent from './components/AnswersComponent';
 import AnswerResultComponent from './components/AnswerResultComponent';
 import InfoComponent from './components/InfoComponent';
+import TimerComponent from './components/TimerComponent';
 
 import { QuestionService } from './services/QuestionService';
 const questionService = ServiceContainer.get(QuestionService);
 
 import { AnswerService } from './services/AnswerService';
 const answerService = ServiceContainer.get(AnswerService);
+
+import { TimerService } from './services/TimerService';
+const timerService = ServiceContainer.get(TimerService);
 
 import { IQuestion } from './interfaces/IQuestion';
 import { IAnswerResult } from './interfaces/IAnswerResult';
@@ -39,22 +43,29 @@ function Quiz(): ReactElement {
   const [answeredQuestionCount, setAnsweredQuestionCount]: [number, (answeredQuestionCount: number) => void] = React.useState<number>(0);
   const [correctAnswersCount, setCorrectAnswersCount]: [number, (correctAnswersCount: number) => void] = React.useState<number>(0);
   const [isExamFinished, setIsQuizFinished]: [boolean, (isExamFinished: boolean) => void] = React.useState<boolean>(false);
+  const [isResetClicked, setIsResetClicked]: [boolean, (isResetClicked: boolean) => void] = React.useState<boolean>(false);
+  const [timerHours, setTimerHours]: [number, (timerHours: number) => void] = React.useState<number>(timerService.getTimerHours());
+  const [timerMinutes, setTimerMinutes]: [number, (timerMinutes: number) => void] = React.useState<number>(timerService.getTimerMinutes());
+  const [timerSeconds, setTimerSeconds]: [number, (timerSeconds: number) => void] = React.useState<number>(timerService.getTimerSeconds());
 
   React.useEffect(() => {
-    questionService.getCurrentQuestion(function (currentQuestion) {
+    questionService.getCurrentQuestion(function (currentQuestion: IQuestion | null) {
       if (currentQuestion) {
         setQuestion(currentQuestion);
       } else {
-        questionService.getRandomQuestion(function (currentQuestion) {
+        questionService.getRandomQuestion(function (currentQuestion: IQuestion) {
           setQuestion(currentQuestion);
         });
       }
     });
 
     setTotalQuestionCount(questionService.getMaxQuestionCount());
-
     setAnsweredQuestionCount(questionService.getAnsweredQuestionsCount());
     setCorrectAnswersCount(answerService.getCorrectAnswersCount());
+    setTimerHours(timerService.getTimerHours());
+    setTimerMinutes(timerService.getTimerMinutes());
+    setTimerSeconds(timerService.getTimerSeconds());
+    setAnswerResult(getEmptyAnswerResult());
   }, []);
 
   const checkAnswer = () => {
@@ -70,17 +81,16 @@ function Quiz(): ReactElement {
       setAnswerResult({
         isAnswered: true,
         isCorrect: false,
-        message: 'Your answer is not correct! The correct answer is ' + question.correct_answers
+        message: 'Wrong! The correct answer is ' + question.correct_answers
       });
       return;
     }
 
     setCorrectAnswersCount(answerService.incrementCorrectAnswersCount());
-
     setAnswerResult({
       isAnswered: true,
       isCorrect: true,
-      message: 'Your answer is correct!'
+      message: 'Correct!'
     });
   };
 
@@ -92,7 +102,7 @@ function Quiz(): ReactElement {
     if (questionService.isQuizFinished()) {
       setIsQuizFinished(true);
     } else {
-      questionService.getRandomQuestion(function (nextQuestion) {
+      questionService.getRandomQuestion(function (nextQuestion: IQuestion) {
         setQuestion(nextQuestion);
         setAnswerResult(getEmptyAnswerResult());
         setSelectedAnswers([]);
@@ -106,8 +116,13 @@ function Quiz(): ReactElement {
     if (isResetConfirmed == true) {
       questionService.resetData();
       answerService.resetData();
-      questionService.getRandomQuestion(function (currentQuestion) {
+      timerService.resetData();
+      questionService.getRandomQuestion(function (currentQuestion: IQuestion) {
         setQuestion(currentQuestion);
+        setTimerHours(timerService.getDefaultTimerHours());
+        setTimerMinutes(timerService.getDefaultTimerMinutes());
+        setTimerSeconds(timerService.getDefaultTimerSeconds());
+        setIsResetClicked(true);
         setAnswerResult(getEmptyAnswerResult());
         setAnsweredQuestionCount(0);
         setCorrectAnswersCount(0);
@@ -130,6 +145,18 @@ function Quiz(): ReactElement {
 
   return (
     <Container fluid className="container mt-5">
+      <Row>
+        <TimerComponent 
+          onTimerReset={() => { setIsResetClicked(false); }}
+          onUpdateTimer={(updatedTime: any) => { 
+            timerService.updateTimer(updatedTime);
+          }}
+          isResetClicked={isResetClicked}
+          hours={timerHours}
+          minutes={timerMinutes} 
+          seconds={timerSeconds}
+        />
+      </Row>
       <Row>
         <InfoComponent
           totalQuestionCount={totalQuestionCount}
@@ -164,7 +191,6 @@ function Quiz(): ReactElement {
           onNextClick={() => { getNextQuestion(); }}
         />
       }
-
       <ResetButtonComponent onResetClick={() => { resetQuiz(); }}>{{}}</ResetButtonComponent>
     </Container >
   );
