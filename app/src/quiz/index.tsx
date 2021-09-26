@@ -1,36 +1,34 @@
-import React, { ReactElement } from 'react';
-import { Container as ServiceContainer } from 'typedi';
+import React, { ReactElement } from "react";
+import { Container as ServiceContainer } from "typedi";
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
 
-import NavigationButtonsComponent from './components/NavigationButtonsComponent';
-import ResetButtonComponent from './components/ResetButtonComponent';
-import QuestionComponent from './components/QuestionComponent';
-import AnswersComponent from './components/AnswersComponent';
-import AnswerResultComponent from './components/AnswerResultComponent';
-import InfoComponent from './components/InfoComponent';
-import TimerComponent from './components/TimerComponent';
+import NavigationButtonsComponent from "./components/NavigationButtonsComponent";
+import ResetButtonComponent from "./components/ResetButtonComponent";
+import QuestionComponent from "./components/QuestionComponent";
+import AnswersComponent from "./components/AnswersComponent";
+import AnswerResultComponent from "./components/AnswerResultComponent";
+import InfoComponent from "./components/InfoComponent";
+import TimerComponent from "./components/TimerComponent";
 
-import { QuestionService } from './services/QuestionService';
+import { QuestionService } from "./services/QuestionService";
 const questionService = ServiceContainer.get(QuestionService);
 
-import { AnswerService } from './services/AnswerService';
+import { AnswerService } from "./services/AnswerService";
 const answerService = ServiceContainer.get(AnswerService);
 
-import { TimerService } from './services/TimerService';
+import { TimerService } from "./services/TimerService";
 const timerService = ServiceContainer.get(TimerService);
 
-import { IQuestion } from './interfaces/IQuestion';
-import { IAnswerResult } from './interfaces/IAnswerResult';
 
-import './assets/Quiz.css';
+import "./assets/Quiz.css";
 
 function getEmptyAnswerResult(): IAnswerResult {
   return {
     isAnswered: false,
     isCorrect: false,
-    message: ''
+    message: ""
   };
 }
 
@@ -81,7 +79,7 @@ function Quiz(): ReactElement {
       setAnswerResult({
         isAnswered: true,
         isCorrect: false,
-        message: 'Wrong! The correct answer is ' + question.correct_answers
+        message: "Wrong! The correct answer is " + question.correct_answers
       });
       return;
     }
@@ -90,7 +88,7 @@ function Quiz(): ReactElement {
     setAnswerResult({
       isAnswered: true,
       isCorrect: true,
-      message: 'Correct!'
+      message: "Correct!"
     });
   };
 
@@ -112,7 +110,7 @@ function Quiz(): ReactElement {
   };
 
   const resetQuiz = () => {
-    const isResetConfirmed = window.confirm('Are you sure to reset the quiz?');
+    const isResetConfirmed = window.confirm("Are you sure to reset the quiz?");
     if (isResetConfirmed == true) {
       questionService.resetData();
       answerService.resetData();

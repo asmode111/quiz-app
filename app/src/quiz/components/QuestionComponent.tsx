@@ -1,10 +1,8 @@
-import { ReactElement } from 'react';
+import { ReactElement } from "react";
 
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
-
-import { IQuestionProps } from '../interfaces/IQuestionProps';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 
 function QuestionComponent(props: IQuestionProps): ReactElement {
   return (

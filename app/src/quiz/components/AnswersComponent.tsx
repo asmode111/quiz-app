@@ -1,9 +1,7 @@
-import React, { ReactElement, ChangeEvent } from 'react';
+import React, { ReactElement, ChangeEvent } from "react";
 
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-
-import { IAnswersProps } from '../interfaces/IAnswersProps';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 function AnswersComponent(props: IAnswersProps): ReactElement {
   const [selectedAnswers, setSelectedAnswers] = React.useState<any>([]);

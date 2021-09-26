@@ -1,7 +1,5 @@
-import axios from 'axios';
-import { Service } from 'typedi';
-
-import { IQuestion } from '../interfaces/IQuestion';
+import axios from "axios";
+import { Service } from "typedi";
 
 @Service()
 class QuestionService {
@@ -9,7 +7,7 @@ class QuestionService {
   private maxQuestionCount = 75;
 
   public getCurrentQuestion(callback: (currentQuestion: IQuestion | null) => void): void {
-    const currentQuestion = localStorage.getItem('quiz_currentQuestion');
+    const currentQuestion = localStorage.getItem("quiz_currentQuestion");
     if (currentQuestion) {
       callback(JSON.parse(currentQuestion));
     } else {
@@ -18,7 +16,7 @@ class QuestionService {
   }
 
   public setCurrentQuestion(data: IQuestion): void {
-    localStorage.setItem('quiz_currentQuestion', JSON.stringify(data));
+    localStorage.setItem("quiz_currentQuestion", JSON.stringify(data));
   }
 
   public getMaxQuestionCount(): number {
@@ -27,12 +25,12 @@ class QuestionService {
 
   public getRandomQuestion(callback: (row: IQuestion) => void): void {
     const answeredQuestionIds = this.getAnsweredQuestionIds();
-    axios.get<IQuestion>('http://localhost:8081/api/question/random', {
+    axios.get<IQuestion>("http://localhost:8081/api/question/random", {
       params: {
         excludedQuestionIds: answeredQuestionIds
       },
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
       timeout: 1000
     }).then(response => {
@@ -44,24 +42,24 @@ class QuestionService {
   public saveAnsweredQuestion(questionId: number): void {
     const answeredQuestionIds = this.getAnsweredQuestionIds();
     if (!answeredQuestionIds) {
-      localStorage.setItem('quiz_answeredQuestionIds', JSON.stringify([questionId]));
+      localStorage.setItem("quiz_answeredQuestionIds", JSON.stringify([questionId]));
     } else {
       answeredQuestionIds.push(questionId);
-      localStorage.setItem('quiz_answeredQuestionIds', JSON.stringify(answeredQuestionIds));
+      localStorage.setItem("quiz_answeredQuestionIds", JSON.stringify(answeredQuestionIds));
     }
   }
 
   public getAnsweredQuestionIds(): any {
-    const answeredQuestionIds = localStorage.getItem('quiz_answeredQuestionIds');
+    const answeredQuestionIds = localStorage.getItem("quiz_answeredQuestionIds");
     if (!answeredQuestionIds) {
-      return '';
+      return "";
     }
 
     return JSON.parse(answeredQuestionIds);
   }
 
   public getAnsweredQuestionsCount(): number {
-    const answeredQuestionIds = localStorage.getItem('quiz_answeredQuestionIds');
+    const answeredQuestionIds = localStorage.getItem("quiz_answeredQuestionIds");
     if (!answeredQuestionIds) {
       return 0;
     }
@@ -76,8 +74,8 @@ class QuestionService {
   }
 
   public resetData(): void {
-    localStorage.removeItem('quiz_answeredQuestionIds');
-    localStorage.removeItem('quiz_currentQuestion');
+    localStorage.removeItem("quiz_answeredQuestionIds");
+    localStorage.removeItem("quiz_currentQuestion");
   }
 }
 

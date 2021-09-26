@@ -20,7 +20,7 @@
     ],
     "rules": {
         "semi": ["error", "always"],
-        "quotes": ["error", "single"],
+        "quotes": ["error", "double"],
         "@typescript-eslint/no-var-requires": 0,
         "import/no-unresolved": "error",
         "react/jsx-uses-react": "off",

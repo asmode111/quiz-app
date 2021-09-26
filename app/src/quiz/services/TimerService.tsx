@@ -1,6 +1,4 @@
-import { Service } from 'typedi';
-
-import { ITimer } from '../interfaces/ITimer';
+import { Service } from "typedi";
 
 @Service()
 class TimerService {
@@ -22,7 +20,7 @@ class TimerService {
   }
 
   public getTimerHours(): number {
-    const timerHours = localStorage.getItem('quiz_timerHours');
+    const timerHours = localStorage.getItem("quiz_timerHours");
     if (!timerHours) {
       return this.getDefaultTimerHours();
     }
@@ -31,7 +29,8 @@ class TimerService {
   }
 
   public getTimerMinutes(): number {
-    const timerMinutes = localStorage.getItem('quiz_timerMinutes');
+    const timerMinutes = localStorage.getItem("quiz_timerMinutes");
+    console.log("timerMinutes", timerMinutes);
     if (!timerMinutes) {
       return this.getDefaultTimerMinutes();
     }
@@ -40,7 +39,7 @@ class TimerService {
   }
   
   public getTimerSeconds(): number {
-    const timerSeconds = localStorage.getItem('quiz_timerSeconds');
+    const timerSeconds = localStorage.getItem("quiz_timerSeconds");
     if (!timerSeconds) {
       return this.getDefaultTimerSeconds();
     }
@@ -49,15 +48,15 @@ class TimerService {
   }
   
   public updateTimer(time: ITimer): void {
-    localStorage.setItem('quiz_timerHours', time.hours.toString());
-    localStorage.setItem('quiz_timerMinutes', time.minutes.toString());
-    localStorage.setItem('quiz_timerSeconds', time.seconds.toString());
+    localStorage.setItem("quiz_timerHours", time.hours.toString());
+    localStorage.setItem("quiz_timerMinutes", time.minutes.toString());
+    localStorage.setItem("quiz_timerSeconds", time.seconds.toString());
   }
   
   public resetData(): void {
-    localStorage.removeItem('quiz_timerHours');
-    localStorage.removeItem('quiz_timerMinutes');
-    localStorage.removeItem('quiz_timerSeconds');
+    localStorage.removeItem("quiz_timerHours");
+    localStorage.removeItem("quiz_timerMinutes");
+    localStorage.removeItem("quiz_timerSeconds");
   }
 }
 

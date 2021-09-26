@@ -1,9 +1,7 @@
-import { ReactElement } from 'react';
+import { ReactElement } from "react";
 
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-
-import { IInfoProps } from '../interfaces/IInfoProps';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 function InfoComponent(props: IInfoProps): ReactElement {
   return (

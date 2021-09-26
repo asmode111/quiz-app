@@ -1,4 +1,4 @@
-import { Service } from 'typedi';
+import { Service } from "typedi";
 
 @Service()
 class AnswerService {
@@ -9,7 +9,7 @@ class AnswerService {
   }
 
   public getCorrectAnswersCount(): number {
-    const correctAnswersCount = localStorage.getItem('quiz_correctAnswersCount');
+    const correctAnswersCount = localStorage.getItem("quiz_correctAnswersCount");
     if (!correctAnswersCount) {
       return 0;
     }
@@ -20,13 +20,13 @@ class AnswerService {
   public incrementCorrectAnswersCount(): number {
     const currentCorrectAnswersCount = this.getCorrectAnswersCount();
     const correctAnswersCount = currentCorrectAnswersCount + 1;
-    localStorage.setItem('quiz_correctAnswersCount', correctAnswersCount.toString());
+    localStorage.setItem("quiz_correctAnswersCount", correctAnswersCount.toString());
 
     return correctAnswersCount;
   }
 
   public resetData(): void {
-    localStorage.removeItem('quiz_correctAnswersCount');
+    localStorage.removeItem("quiz_correctAnswersCount");
   }
 }
 

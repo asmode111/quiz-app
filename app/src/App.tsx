@@ -1,7 +1,7 @@
-import 'reflect-metadata';
-import { ReactElement } from 'react';
+import "reflect-metadata";
+import { ReactElement } from "react";
 
-import Quiz from './quiz';
+import Quiz from "./quiz";
 
 function App(): ReactElement {
   // const [loading, setLoading]: [boolean, (loading: boolean) => void] = React.useState<boolean>(true);

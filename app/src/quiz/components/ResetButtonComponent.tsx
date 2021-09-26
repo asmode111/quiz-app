@@ -1,7 +1,7 @@
-import { ReactElement } from 'react';
+import { ReactElement } from "react";
 
-import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
 
 function ResetButtonComponent(props: any): ReactElement {
   return (

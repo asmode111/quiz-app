@@ -1,8 +1,8 @@
-import { ReactElement } from 'react';
+import { ReactElement } from "react";
 
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 
 function AnswerResultComponent(props: any): ReactElement {
   if (!props.answerResult.isAnswered) {
@@ -14,7 +14,7 @@ function AnswerResultComponent(props: any): ReactElement {
       <Row className="pt-2">
         <Alert
           key="ansewrResult"
-          variant={props.answerResult.isCorrect ? 'success' : 'danger'}>
+          variant={props.answerResult.isCorrect ? "success" : "danger"}>
           {props.answerResult.message}
         </Alert>
       </Row>
