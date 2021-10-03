@@ -6,17 +6,6 @@ interface IQuestion {
   correct_answers: any;
 }
 
-type QuestionState = {
-  question: IQuestion[]
-}
-
-type QuestionAction = {
-  type: string
-  question: IQuestion
-}
-
-type DispatchType = (args: QuestionAction) => QuestionAction;
-
 //////////////////////////////////////
 
 interface IAnswerResult {

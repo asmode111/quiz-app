@@ -7,18 +7,13 @@ function TimerComponent(props: any): ReactElement {
   const [time, setTime] = React.useState<ITimer>({hours: props.hours, minutes: props.minutes, seconds: props.seconds});
 
   const tick = () => {
-    console.log("time", time);
     if (time.hours === 0 && time.minutes === 0 && time.seconds === 0) {
-      console.log("1");
       reset();
     } else if (time.hours === 0 && time.seconds === 0) {
-      console.log("2");
       setTime({hours: time.hours - 1, minutes: 59, seconds: 59});
     } else if (time.seconds === 0) {
-      console.log("3");
       setTime({hours: time.hours, minutes: time.minutes - 1, seconds: 59});
     } else {
-      console.log("4", time.minutes);
       setTime({hours: time.hours, minutes: time.minutes, seconds: time.seconds - 1});
     }
 

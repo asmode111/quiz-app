@@ -30,7 +30,6 @@ class TimerService {
 
   public getTimerMinutes(): number {
     const timerMinutes = localStorage.getItem("quiz_timerMinutes");
-    console.log("timerMinutes", timerMinutes);
     if (!timerMinutes) {
       return this.getDefaultTimerMinutes();
     }

@@ -101,6 +101,7 @@ function Quiz(): ReactElement {
       setIsQuizFinished(true);
     } else {
       questionService.getRandomQuestion(function (nextQuestion: IQuestion) {
+        console.log("nextQuestion", nextQuestion);
         setQuestion(nextQuestion);
         setAnswerResult(getEmptyAnswerResult());
         setSelectedAnswers([]);

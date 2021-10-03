@@ -31,17 +31,17 @@ function AnswersComponent(props: IAnswersProps): ReactElement {
     }
 
     const elementKey = props.questionId + key;
-    let answerElement = <input key={elementKey} disabled={props.isAnswered} type="radio" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
+    let answerElement = <input key={elementKey} className="checkmark" disabled={props.isAnswered} type="radio" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
     if (isMultiple) {
-      answerElement = <input key={elementKey} disabled={props.isAnswered} type="checkbox" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
+      answerElement = <input key={elementKey} className="checkmark" disabled={props.isAnswered} type="checkbox" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
     }
 
     answers.push(
       <Row key={key} className="pb-3">
         <label className="options">
-          {answer}
+          {key} )
           {answerElement}
-          <span className="checkmark"></span>
+          {answer}
         </label>
       </Row>
     );

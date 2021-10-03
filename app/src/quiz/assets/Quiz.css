@@ -35,10 +35,6 @@ body {
   cursor: pointer;
 }
 
-.options input {
-  opacity: 0;
-}
-
 .checkmark {
   position: absolute;
   top: -1px;
