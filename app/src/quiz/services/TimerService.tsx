@@ -1,4 +1,5 @@
 import { Service } from "typedi";
+import { getTextOfJSDocComment } from "typescript";
 
 @Service()
 class TimerService {
@@ -6,56 +7,33 @@ class TimerService {
   private defaultTimerHours = 1;
   private defaultTimerMinutes = 30;
   private defaultTimerSeconds = 0;
-
-  public getDefaultTimerHours(): number {
-    return this.defaultTimerHours;
-  }
   
-  public getDefaultTimerMinutes(): number {
-    return this.defaultTimerMinutes;
-  }
-  
-  public getDefaultTimerSeconds(): number {
-    return this.defaultTimerSeconds;
+  public getDefaultTimer(): ITimer {
+    return {
+      "hours": this.defaultTimerHours,
+      "minutes": this.defaultTimerMinutes,
+      "seconds": this.defaultTimerSeconds,
+    };
   }
 
-  public getTimerHours(): number {
-    const timerHours = localStorage.getItem("quiz_timerHours");
-    if (!timerHours) {
-      return this.getDefaultTimerHours();
+  public getTimer(): ITimer {
+    const timer = localStorage.getItem("quiz_timer");
+    if (!timer) {
+      const defaultTimer = this.getDefaultTimer();
+      this.updateTimer(defaultTimer);
+
+      return defaultTimer;
     }
 
-    return parseInt(timerHours);
-  }
-
-  public getTimerMinutes(): number {
-    const timerMinutes = localStorage.getItem("quiz_timerMinutes");
-    if (!timerMinutes) {
-      return this.getDefaultTimerMinutes();
-    }
-
-    return parseInt(timerMinutes);
+    return JSON.parse(timer);
   }
   
-  public getTimerSeconds(): number {
-    const timerSeconds = localStorage.getItem("quiz_timerSeconds");
-    if (!timerSeconds) {
-      return this.getDefaultTimerSeconds();
-    }
-
-    return parseInt(timerSeconds);
+  public updateTimer(timer: ITimer): void {
+    localStorage.setItem("quiz_timer", JSON.stringify(timer));
   }
   
-  public updateTimer(time: ITimer): void {
-    localStorage.setItem("quiz_timerHours", time.hours.toString());
-    localStorage.setItem("quiz_timerMinutes", time.minutes.toString());
-    localStorage.setItem("quiz_timerSeconds", time.seconds.toString());
-  }
-  
-  public resetData(): void {
-    localStorage.removeItem("quiz_timerHours");
-    localStorage.removeItem("quiz_timerMinutes");
-    localStorage.removeItem("quiz_timerSeconds");
+  public resetTimer(): void {
+    localStorage.removeItem("quiz_timer");
   }
 }
 

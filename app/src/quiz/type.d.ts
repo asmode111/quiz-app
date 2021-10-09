@@ -6,8 +6,6 @@ interface IQuestion {
   correct_answers: any;
 }
 
-//////////////////////////////////////
-
 interface IAnswerResult {
   isAnswered: boolean;
   isCorrect: boolean;

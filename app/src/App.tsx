@@ -1,13 +1,19 @@
 import "reflect-metadata";
 import { ReactElement } from "react";
 
+import store from "./quiz/store";
+import { Provider } from "react-redux";
+
 import Quiz from "./quiz";
 
 function App(): ReactElement {
-  // const [loading, setLoading]: [boolean, (loading: boolean) => void] = React.useState<boolean>(true);
-  // const [error, setError]: [string, (error: string) => void] = React.useState('');
-
   return <Quiz></Quiz>;
 }
 
-export default App;
+const AppWrapper = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+
+export default AppWrapper;
