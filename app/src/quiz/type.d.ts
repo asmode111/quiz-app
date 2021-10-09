@@ -17,7 +17,7 @@ interface IAnswersProps {
   answers: string;
   correctAnswers: string;
   isAnswered: boolean;
-  onSelectedAnswersChange: (val: { [key: string]: string[] }) => void;
+  onIsAnswerSelected: () => void;
 }
 
 interface IInfoProps {

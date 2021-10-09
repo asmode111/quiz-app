@@ -1,27 +1,27 @@
-import React, { ReactElement, ChangeEvent } from "react";
+import { ReactElement, ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
 
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
+import { setSelectedAnswers, removeSelectedAnswer } from "../slices/selectedAnswersSlice";
+
 function AnswersComponent(props: IAnswersProps): ReactElement {
-  const [selectedAnswers, setSelectedAnswers] = React.useState<any>([]);
+  const dispatch = useDispatch();
   const isMultiple = props.correctAnswers.length > 1;
 
   const handleAnswerChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    let _selectedAnswers = selectedAnswers;
     if (isMultiple) {
       if (e.target.checked) {
-        _selectedAnswers.push(e.target.value);
+        dispatch(setSelectedAnswers(e.target.value));
       } else {
-        _selectedAnswers = selectedAnswers.filter(function (ele: string) {
-          return ele != e.target.value;
-        });
+        dispatch(removeSelectedAnswer(e.target.value));
       }
     } else {
-      _selectedAnswers = [e.target.value];
+      dispatch(setSelectedAnswers(e.target.value));
     }
-    setSelectedAnswers(_selectedAnswers);
-    props.onSelectedAnswersChange(_selectedAnswers);
+
+    props.onIsAnswerSelected();
   };
 
   const answers = [];
@@ -31,9 +31,9 @@ function AnswersComponent(props: IAnswersProps): ReactElement {
     }
 
     const elementKey = props.questionId + key;
-    let answerElement = <input key={elementKey} className="checkmark" disabled={props.isAnswered} type="radio" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
+    let answerElement = <input key={elementKey} className="checkmark" disabled={props.isAnswered} type="radio" onChange={handleAnswerChange} value={key} name="selectedAnswers2" />;
     if (isMultiple) {
-      answerElement = <input key={elementKey} className="checkmark" disabled={props.isAnswered} type="checkbox" onChange={handleAnswerChange} value={key} name="selectedAnswers" />;
+      answerElement = <input key={elementKey} className="checkmark" disabled={props.isAnswered} type="checkbox" onChange={handleAnswerChange} value={key} name="selectedAnswers2" />;
     }
 
     answers.push(

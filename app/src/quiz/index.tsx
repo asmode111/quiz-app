@@ -5,9 +5,10 @@ import { Container as ServiceContainer } from "typedi";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
-import { selectQuestion, selectResetQuiz } from "./store";
+import { selectQuestion, selectIsResetClicked, selectSelectedAnswers } from "./store";
 import { setQuestion } from "./slices/questionSlice";
 import { setIsResetClicked } from "./slices/resetQuizSlice";
+import { resetSelectedAnswers } from "./slices/selectedAnswersSlice";
 
 import NavigationButtonsComponent from "./components/NavigationButtonsComponent";
 import ResetButtonComponent from "./components/ResetButtonComponent";
@@ -37,11 +38,11 @@ function getEmptyAnswerResult(): IAnswerResult {
 }
 
 function Quiz(): ReactElement {
-  const question = useSelector(selectQuestion);
-  const isResetClicked = useSelector(selectResetQuiz);
   const dispatch = useDispatch();
+  const question = useSelector(selectQuestion);
+  const isResetClicked = useSelector(selectIsResetClicked);
+  const selectedAnswers = useSelector(selectSelectedAnswers);
 
-  const [selectedAnswers, setSelectedAnswers] = React.useState<any>([]);
   const [answerResult, setAnswerResult] = React.useState<IAnswerResult>(getEmptyAnswerResult());
   const [isAnswerSelected, setIsAnswerSelected]: [boolean, (isAnswerSelected: boolean) => void] = React.useState<boolean>(false);
   const [totalQuestionCount, setTotalQuestionCount]: [number, (totalQuestionCount: number) => void] = React.useState<number>(0);
@@ -104,7 +105,7 @@ function Quiz(): ReactElement {
       questionService.getRandomQuestion(function (nextQuestion: IQuestion) {
         dispatch(setQuestion(nextQuestion));
         setAnswerResult(getEmptyAnswerResult());
-        setSelectedAnswers([]);
+        dispatch(resetSelectedAnswers());
         setIsAnswerSelected(false);
       });
     }
@@ -123,7 +124,7 @@ function Quiz(): ReactElement {
         setAnswerResult(getEmptyAnswerResult());
         setAnsweredQuestionCount(0);
         setCorrectAnswersCount(0);
-        setSelectedAnswers([]);
+        dispatch(resetSelectedAnswers());
         setIsAnswerSelected(false);
         setIsQuizFinished(false);
       });
@@ -172,8 +173,7 @@ function Quiz(): ReactElement {
           answers={question.answers}
           correctAnswers={question.correct_answers}
           isAnswered={answerResult.isAnswered}
-          onSelectedAnswersChange={(selectedAnswers: any) => {
-            setSelectedAnswers(selectedAnswers);
+          onIsAnswerSelected={() => {
             setIsAnswerSelected(true);
           }}
         />
