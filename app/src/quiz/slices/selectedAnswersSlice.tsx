@@ -26,6 +26,10 @@ export const selectedAnswersSlice = createSlice({
   }
 });
 
-export const { setSelectedAnswers, resetSelectedAnswers, removeSelectedAnswer } = selectedAnswersSlice.actions;
+export const { 
+  setSelectedAnswers, 
+  resetSelectedAnswers, 
+  removeSelectedAnswer 
+} = selectedAnswersSlice.actions;
 
 export default selectedAnswersSlice.reducer;

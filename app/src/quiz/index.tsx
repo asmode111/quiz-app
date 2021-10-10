@@ -5,10 +5,18 @@ import { Container as ServiceContainer } from "typedi";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
-import { selectQuestion, selectIsResetClicked, selectSelectedAnswers } from "./store";
+import { 
+  selectQuestion, 
+  selectIsResetClicked, 
+  selectSelectedAnswers, 
+  selectIsAnswerSelected,
+  selectCorrectAnswersCount
+} from "./store";
 import { setQuestion } from "./slices/questionSlice";
-import { setIsResetClicked } from "./slices/resetQuizSlice";
+import { enableIsResetClicked, resetIsResetClicked } from "./slices/resetQuizSlice";
 import { resetSelectedAnswers } from "./slices/selectedAnswersSlice";
+import { enableIsAnswerSelected, resetIsAnswerSelected } from "./slices/answerSelectedSlice";
+import { setCorrectAnswersCount, resetCorrectAnswersCount } from "./slices/correctAnswersCountSlice";
 
 import NavigationButtonsComponent from "./components/NavigationButtonsComponent";
 import ResetButtonComponent from "./components/ResetButtonComponent";
@@ -42,13 +50,12 @@ function Quiz(): ReactElement {
   const question = useSelector(selectQuestion);
   const isResetClicked = useSelector(selectIsResetClicked);
   const selectedAnswers = useSelector(selectSelectedAnswers);
+  const isAnswerSelected = useSelector(selectIsAnswerSelected);
+  const correctAnswersCount = useSelector(selectCorrectAnswersCount);
+  const totalQuestionCount = questionService.getMaxQuestionCount();
+  const answeredQuestionCount = questionService.getAnsweredQuestionsCount();
 
   const [answerResult, setAnswerResult] = React.useState<IAnswerResult>(getEmptyAnswerResult());
-  const [isAnswerSelected, setIsAnswerSelected]: [boolean, (isAnswerSelected: boolean) => void] = React.useState<boolean>(false);
-  const [totalQuestionCount, setTotalQuestionCount]: [number, (totalQuestionCount: number) => void] = React.useState<number>(0);
-  const [answeredQuestionCount, setAnsweredQuestionCount]: [number, (answeredQuestionCount: number) => void] = React.useState<number>(0);
-  const [correctAnswersCount, setCorrectAnswersCount]: [number, (correctAnswersCount: number) => void] = React.useState<number>(0);
-  const [isExamFinished, setIsQuizFinished]: [boolean, (isExamFinished: boolean) => void] = React.useState<boolean>(false);
   const [timer, setTimer]: [ITimer, (timer: ITimer) => void] = React.useState<ITimer>(timerService.getTimer());
 
   React.useEffect(() => {
@@ -62,9 +69,7 @@ function Quiz(): ReactElement {
       }
     });
 
-    setTotalQuestionCount(questionService.getMaxQuestionCount());
-    setAnsweredQuestionCount(questionService.getAnsweredQuestionsCount());
-    setCorrectAnswersCount(answerService.getCorrectAnswersCount());
+    dispatch(setCorrectAnswersCount(answerService.getCorrectAnswersCount()));
     setAnswerResult(getEmptyAnswerResult());
   }, []);
 
@@ -74,7 +79,6 @@ function Quiz(): ReactElement {
     }
 
     questionService.saveAnsweredQuestion(question.id);
-    setAnsweredQuestionCount(questionService.getAnsweredQuestionsCount());
     questionService.getRandomQuestion(() => ({}));
 
     if (answerService.isAnswerCorrect(selectedAnswers, question.correct_answers)) {
@@ -86,7 +90,7 @@ function Quiz(): ReactElement {
       return;
     }
 
-    setCorrectAnswersCount(answerService.incrementCorrectAnswersCount());
+    dispatch(setCorrectAnswersCount(answerService.incrementCorrectAnswersCount()));
     setAnswerResult({
       isAnswered: true,
       isCorrect: true,
@@ -99,14 +103,12 @@ function Quiz(): ReactElement {
       return;
     }
 
-    if (questionService.isQuizFinished()) {
-      setIsQuizFinished(true);
-    } else {
+    if (!questionService.isQuizFinished()) {
       questionService.getRandomQuestion(function (nextQuestion: IQuestion) {
         dispatch(setQuestion(nextQuestion));
         setAnswerResult(getEmptyAnswerResult());
         dispatch(resetSelectedAnswers());
-        setIsAnswerSelected(false);
+        dispatch(resetIsAnswerSelected());
       });
     }
   };
@@ -114,7 +116,7 @@ function Quiz(): ReactElement {
   const resetQuiz = () => {
     const isResetConfirmed = window.confirm("Are you sure to reset the quiz?");
     if (isResetConfirmed == true) {
-      dispatch(setIsResetClicked(true));
+      dispatch(enableIsResetClicked());
       // timerService.resetTimer();
       // setTimer(timerService.getTimer());
       questionService.resetData();
@@ -122,16 +124,14 @@ function Quiz(): ReactElement {
       questionService.getRandomQuestion(function (currentQuestion: IQuestion) {
         dispatch(setQuestion(currentQuestion));
         setAnswerResult(getEmptyAnswerResult());
-        setAnsweredQuestionCount(0);
-        setCorrectAnswersCount(0);
+        dispatch(resetCorrectAnswersCount());
         dispatch(resetSelectedAnswers());
-        setIsAnswerSelected(false);
-        setIsQuizFinished(false);
+        dispatch(resetIsAnswerSelected());
       });
     }
   };
 
-  if (isExamFinished) {
+  if (questionService.isQuizFinished()) {
     return (
       <Container fluid className="container mt-5">
         <Row>Quiz is over.</Row>
@@ -145,7 +145,7 @@ function Quiz(): ReactElement {
     <Container fluid className="container mt-5">
       <Row>
         <TimerComponent 
-          onTimerReset={() => { dispatch(setIsResetClicked(false)); }}
+          onTimerReset={() => { dispatch(resetIsResetClicked()); }}
           onUpdateTimer={(updatedTime: any) => { 
             timerService.updateTimer(updatedTime);
           }}
@@ -174,7 +174,7 @@ function Quiz(): ReactElement {
           correctAnswers={question.correct_answers}
           isAnswered={answerResult.isAnswered}
           onIsAnswerSelected={() => {
-            setIsAnswerSelected(true);
+            dispatch(enableIsAnswerSelected());
           }}
         />
       }

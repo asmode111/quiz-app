@@ -12,12 +12,15 @@ export const resetQuizSlice = createSlice({
   name: "resetQuiz",
   initialState,
   reducers: {
-  setIsResetClicked: (state: any, action: PayloadAction<boolean>) => {
-      state.isResetClicked = action.payload;
+    enableIsResetClicked: (state: any) => {
+      state.isResetClicked = true;
+    },
+    resetIsResetClicked: (state: any) => {
+      state.isResetClicked = false;
     }
   }
 });
 
-export const { setIsResetClicked } = resetQuizSlice.actions;
+export const { enableIsResetClicked, resetIsResetClicked } = resetQuizSlice.actions;
 
 export default resetQuizSlice.reducer;

@@ -4,7 +4,11 @@ import { useDispatch } from "react-redux";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { setSelectedAnswers, removeSelectedAnswer } from "../slices/selectedAnswersSlice";
+import { 
+  setSelectedAnswers, 
+  removeSelectedAnswer, 
+  resetSelectedAnswers 
+} from "../slices/selectedAnswersSlice";
 
 function AnswersComponent(props: IAnswersProps): ReactElement {
   const dispatch = useDispatch();
@@ -18,6 +22,7 @@ function AnswersComponent(props: IAnswersProps): ReactElement {
         dispatch(removeSelectedAnswer(e.target.value));
       }
     } else {
+      dispatch(resetSelectedAnswers());
       dispatch(setSelectedAnswers(e.target.value));
     }
 
