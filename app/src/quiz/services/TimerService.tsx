@@ -35,6 +35,29 @@ class TimerService {
   public resetTimer(): void {
     localStorage.removeItem("quiz_timer");
   }
+
+  public getTimeUnits( ms: number ): ITimer {
+    const allocate = (msUnit: number) => {
+      const units = Math.trunc(ms / msUnit);
+      ms -= units * msUnit;
+      return units;
+    };
+
+    return {
+      // days: allocate(86400000),
+      hours: allocate(3600000),
+      minutes: allocate(60000),
+      seconds: allocate(1000),
+      // ms: ms
+    };
+  }
+
+  public getTimeDiff(time: ITimer): number {
+    let diffInMiliseconds = (time.hours * 60 * 60 * 1000) + (time.minutes * 60 * 1000) + (time.seconds * 1000);
+    diffInMiliseconds--;
+
+    return diffInMiliseconds;
+  }
 }
 
 export { TimerService };

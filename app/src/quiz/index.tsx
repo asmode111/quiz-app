@@ -14,7 +14,7 @@ import {
   selectAnswerResult
 } from "./store";
 import { setQuestion } from "./slices/questionSlice";
-import { enableIsResetClicked, resetIsResetClicked } from "./slices/resetQuizSlice";
+import { setIsResetClicked, resetIsResetClicked } from "./slices/resetQuizSlice";
 import { resetSelectedAnswers } from "./slices/selectedAnswersSlice";
 import { enableIsAnswerSelected, resetIsAnswerSelected } from "./slices/answerSelectedSlice";
 import { setCorrectAnswersCount, resetCorrectAnswersCount } from "./slices/correctAnswersCountSlice";
@@ -38,9 +38,6 @@ const questionService = ServiceContainer.get(QuestionService);
 import { AnswerService } from "./services/AnswerService";
 const answerService = ServiceContainer.get(AnswerService);
 
-import { TimerService } from "./services/TimerService";
-const timerService = ServiceContainer.get(TimerService);
-
 import "./assets/Quiz.css";
 
 function Quiz(): ReactElement {
@@ -53,8 +50,6 @@ function Quiz(): ReactElement {
   const totalQuestionCount = questionService.getMaxQuestionCount();
   const answeredQuestionCount = questionService.getAnsweredQuestionsCount();
   const answerResult = useSelector(selectAnswerResult);
-
-  const [timer, setTimer]: [ITimer, (timer: ITimer) => void] = React.useState<ITimer>(timerService.getTimer());
 
   React.useEffect(() => {
     questionService.getCurrentQuestion(function (currentQuestion: IQuestion | null) {
@@ -106,9 +101,7 @@ function Quiz(): ReactElement {
   const resetQuiz = () => {
     const isResetConfirmed = window.confirm("Are you sure to reset the quiz?");
     if (isResetConfirmed == true) {
-      dispatch(enableIsResetClicked());
-      // timerService.resetTimer();
-      // setTimer(timerService.getTimer());
+      dispatch(setIsResetClicked());
       questionService.resetData();
       answerService.resetData();
       questionService.getRandomQuestion(function (currentQuestion: IQuestion) {
@@ -135,12 +128,8 @@ function Quiz(): ReactElement {
     <Container fluid className="container mt-5">
       <Row>
         <TimerComponent 
-          onTimerReset={() => { dispatch(resetIsResetClicked()); }}
-          onUpdateTimer={(updatedTime: any) => { 
-            timerService.updateTimer(updatedTime);
-          }}
           isResetClicked={isResetClicked}
-          timer={timer}
+          onTimerReset={() => { dispatch(resetIsResetClicked()); }}
         />
       </Row>
       <Row>
