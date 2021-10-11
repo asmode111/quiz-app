@@ -7,17 +7,20 @@ function TimerComponent(props: any): ReactElement {
   const [time, setTime] = React.useState<ITimer>(props.timer);
 
   const tick = () => {
-    if (time.hours === 0 && time.minutes === 0 && time.seconds === 0) {
-      reset();
-    } else if (time.hours === 0 && time.seconds === 0) {
-      setTime({hours: time.hours - 1, minutes: 59, seconds: 59});
-    } else if (time.seconds === 0) {
-      setTime({hours: time.hours, minutes: time.minutes - 1, seconds: 59});
-    } else {
-      setTime({hours: time.hours, minutes: time.minutes, seconds: time.seconds - 1});
-    }
-
-    props.onUpdateTimer(time);
+    console.log(time);
+    const expireIn = new Date();
+    expireIn.setHours(time.hours);
+    expireIn.setMinutes(time.minutes);
+    expireIn.setSeconds(time.seconds);
+    console.log(expireIn);
+    
+    console.log("distance", distance);
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const newTime = {hours: hours, minutes: minutes, seconds: seconds};
+    setTime(newTime);
+    // props.onUpdateTimer(newTime);
   };
 
   const reset = () => setTime({hours: time.hours, minutes: time.minutes, seconds: time.seconds});

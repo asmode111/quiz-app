@@ -10,13 +10,19 @@ import {
   selectIsResetClicked, 
   selectSelectedAnswers, 
   selectIsAnswerSelected,
-  selectCorrectAnswersCount
+  selectCorrectAnswersCount,
+  selectAnswerResult
 } from "./store";
 import { setQuestion } from "./slices/questionSlice";
 import { enableIsResetClicked, resetIsResetClicked } from "./slices/resetQuizSlice";
 import { resetSelectedAnswers } from "./slices/selectedAnswersSlice";
 import { enableIsAnswerSelected, resetIsAnswerSelected } from "./slices/answerSelectedSlice";
 import { setCorrectAnswersCount, resetCorrectAnswersCount } from "./slices/correctAnswersCountSlice";
+import {
+  resetAnswerResult,
+  setWrongAnswerResult,
+  setCorrectAnswerResult 
+} from "./slices/answerResultSlice";
 
 import NavigationButtonsComponent from "./components/NavigationButtonsComponent";
 import ResetButtonComponent from "./components/ResetButtonComponent";
@@ -37,14 +43,6 @@ const timerService = ServiceContainer.get(TimerService);
 
 import "./assets/Quiz.css";
 
-function getEmptyAnswerResult(): IAnswerResult {
-  return {
-    isAnswered: false,
-    isCorrect: false,
-    message: ""
-  };
-}
-
 function Quiz(): ReactElement {
   const dispatch = useDispatch();
   const question = useSelector(selectQuestion);
@@ -54,8 +52,8 @@ function Quiz(): ReactElement {
   const correctAnswersCount = useSelector(selectCorrectAnswersCount);
   const totalQuestionCount = questionService.getMaxQuestionCount();
   const answeredQuestionCount = questionService.getAnsweredQuestionsCount();
+  const answerResult = useSelector(selectAnswerResult);
 
-  const [answerResult, setAnswerResult] = React.useState<IAnswerResult>(getEmptyAnswerResult());
   const [timer, setTimer]: [ITimer, (timer: ITimer) => void] = React.useState<ITimer>(timerService.getTimer());
 
   React.useEffect(() => {
@@ -70,7 +68,7 @@ function Quiz(): ReactElement {
     });
 
     dispatch(setCorrectAnswersCount(answerService.getCorrectAnswersCount()));
-    setAnswerResult(getEmptyAnswerResult());
+    dispatch(resetAnswerResult());
   }, []);
 
   const checkAnswer = () => {
@@ -82,20 +80,12 @@ function Quiz(): ReactElement {
     questionService.getRandomQuestion(() => ({}));
 
     if (answerService.isAnswerCorrect(selectedAnswers, question.correct_answers)) {
-      setAnswerResult({
-        isAnswered: true,
-        isCorrect: false,
-        message: "Wrong! The correct answer is " + question.correct_answers
-      });
+      dispatch(setWrongAnswerResult(question.correct_answers));
       return;
     }
 
     dispatch(setCorrectAnswersCount(answerService.incrementCorrectAnswersCount()));
-    setAnswerResult({
-      isAnswered: true,
-      isCorrect: true,
-      message: "Correct!"
-    });
+    dispatch(setCorrectAnswerResult());
   };
 
   const getNextQuestion = () => {
@@ -106,7 +96,7 @@ function Quiz(): ReactElement {
     if (!questionService.isQuizFinished()) {
       questionService.getRandomQuestion(function (nextQuestion: IQuestion) {
         dispatch(setQuestion(nextQuestion));
-        setAnswerResult(getEmptyAnswerResult());
+        dispatch(resetAnswerResult());
         dispatch(resetSelectedAnswers());
         dispatch(resetIsAnswerSelected());
       });
@@ -123,7 +113,7 @@ function Quiz(): ReactElement {
       answerService.resetData();
       questionService.getRandomQuestion(function (currentQuestion: IQuestion) {
         dispatch(setQuestion(currentQuestion));
-        setAnswerResult(getEmptyAnswerResult());
+        dispatch(resetAnswerResult());
         dispatch(resetCorrectAnswersCount());
         dispatch(resetSelectedAnswers());
         dispatch(resetIsAnswerSelected());
