@@ -11,10 +11,12 @@ import {
   selectSelectedAnswers, 
   selectIsAnswerSelected,
   selectCorrectAnswersCount,
-  selectAnswerResult
+  selectAnswerResult,
+  selectIsQuizOver
 } from "./store";
 import { setQuestion } from "./slices/questionSlice";
 import { setIsResetClicked, resetIsResetClicked } from "./slices/resetQuizSlice";
+import { setIsQuizOver, resetIsQuizOver } from "./slices/quizOverSlice";
 import { resetSelectedAnswers } from "./slices/selectedAnswersSlice";
 import { enableIsAnswerSelected, resetIsAnswerSelected } from "./slices/answerSelectedSlice";
 import { setCorrectAnswersCount, resetCorrectAnswersCount } from "./slices/correctAnswersCountSlice";
@@ -38,6 +40,9 @@ const questionService = ServiceContainer.get(QuestionService);
 import { AnswerService } from "./services/AnswerService";
 const answerService = ServiceContainer.get(AnswerService);
 
+import { TimerService } from "./services/TimerService";
+const timerService = ServiceContainer.get(TimerService);
+
 import "./assets/Quiz.css";
 
 function Quiz(): ReactElement {
@@ -50,20 +55,25 @@ function Quiz(): ReactElement {
   const totalQuestionCount = questionService.getMaxQuestionCount();
   const answeredQuestionCount = questionService.getAnsweredQuestionsCount();
   const answerResult = useSelector(selectAnswerResult);
+  const isQuizOver = useSelector(selectIsQuizOver);
 
   React.useEffect(() => {
-    questionService.getCurrentQuestion(function (currentQuestion: IQuestion | null) {
-      if (currentQuestion) {
-        dispatch(setQuestion(currentQuestion));
-      } else {
-        questionService.getRandomQuestion(function (currentQuestion: IQuestion) {
+    if (timerService.isTimeout()) {
+      dispatch(setIsQuizOver());
+    } else {
+      questionService.getCurrentQuestion(function (currentQuestion: IQuestion | null) {
+        if (currentQuestion) {
           dispatch(setQuestion(currentQuestion));
-        });
-      }
-    });
-
-    dispatch(setCorrectAnswersCount(answerService.getCorrectAnswersCount()));
-    dispatch(resetAnswerResult());
+        } else {
+          questionService.getRandomQuestion(function (currentQuestion: IQuestion) {
+            dispatch(setQuestion(currentQuestion));
+          });
+        }
+      });
+  
+      dispatch(setCorrectAnswersCount(answerService.getCorrectAnswersCount()));
+      dispatch(resetAnswerResult());
+    }
   }, []);
 
   const checkAnswer = () => {
@@ -88,13 +98,15 @@ function Quiz(): ReactElement {
       return;
     }
 
-    if (!questionService.isQuizFinished()) {
+    if (!questionService.isQuizFinished() && !timerService.isTimeout()) {
       questionService.getRandomQuestion(function (nextQuestion: IQuestion) {
         dispatch(setQuestion(nextQuestion));
         dispatch(resetAnswerResult());
         dispatch(resetSelectedAnswers());
         dispatch(resetIsAnswerSelected());
       });
+    } else {
+      dispatch(setIsQuizOver());
     }
   };
 
@@ -104,17 +116,19 @@ function Quiz(): ReactElement {
       dispatch(setIsResetClicked());
       questionService.resetData();
       answerService.resetData();
+      timerService.resetTimer();
       questionService.getRandomQuestion(function (currentQuestion: IQuestion) {
         dispatch(setQuestion(currentQuestion));
         dispatch(resetAnswerResult());
         dispatch(resetCorrectAnswersCount());
         dispatch(resetSelectedAnswers());
         dispatch(resetIsAnswerSelected());
+        dispatch(resetIsQuizOver());
       });
     }
   };
 
-  if (questionService.isQuizFinished()) {
+  if (isQuizOver) {
     return (
       <Container fluid className="container mt-5">
         <Row>Quiz is over.</Row>
@@ -142,9 +156,10 @@ function Quiz(): ReactElement {
       <AnswerResultComponent answerResult={answerResult} />
       {question !== null &&
         <QuestionComponent
+          questionId={question.id}
           question={question.question}
           questionBody={question.question_body}
-        >{{}}</QuestionComponent>
+        />
       }
       {question !== null &&
         <AnswersComponent

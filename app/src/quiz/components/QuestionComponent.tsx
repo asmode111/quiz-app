@@ -8,7 +8,7 @@ function QuestionComponent(props: IQuestionProps): ReactElement {
   return (
     <Col>
       <Row className="pt-2">
-        <Col className="py-2 h5">Q. {props.question}</Col>
+        <Col className="py-2 h5">Q ({props.questionId}) - . {props.question}</Col>
       </Row>
       {props.questionBody
         && <Row className="pb-2">

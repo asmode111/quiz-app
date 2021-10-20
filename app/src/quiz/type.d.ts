@@ -27,7 +27,7 @@ interface IInfoProps {
 }
 
 interface IQuestionProps {
-  children: React.ReactNode;
+  questionId: number;
   question: string;
   questionBody: string;
 }

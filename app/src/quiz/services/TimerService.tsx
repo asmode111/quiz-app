@@ -34,6 +34,7 @@ class TimerService {
   
   public resetTimer(): void {
     localStorage.removeItem("quiz_timer");
+    this.getDefaultTimer();
   }
 
   public getTimeUnits( ms: number ): ITimer {
@@ -57,6 +58,12 @@ class TimerService {
     diffInMiliseconds--;
 
     return diffInMiliseconds;
+  }
+
+  public isTimeout(): boolean {
+    return this.getTimer().hours === 0 
+      && this.getTimer().minutes === 0 
+      && this.getTimer().seconds === 0;
   }
 }
 
