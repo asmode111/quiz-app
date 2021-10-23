@@ -4,9 +4,9 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
 import SelectQuizComponent from "./components/SelectQuizComponent";
+import SelectableQuizComponent from "./components/SelectableQuizComponent";
 
 import "./assets/Quiz.css";
-import SelectableQuizComponent from "./components/SelectableQuizComponent";
 
 function Quiz(): ReactElement {
   const [selectedComponent, setSelectedComponent] = useState<number>(0);
@@ -14,7 +14,6 @@ function Quiz(): ReactElement {
   useEffect(() => {
     const savedSelectedQuizType = localStorage.getItem("quiz_selectedQuizType");
     if (savedSelectedQuizType) {
-      console.log("savedSelectedQuizType", savedSelectedQuizType);
       setSelectedComponent(parseInt(savedSelectedQuizType));
     }
   });
@@ -44,10 +43,11 @@ function Quiz(): ReactElement {
     return defaultComponent();
   }
 
-  if (selectedComponent === 1) {
+  if (selectedComponent === 1 || selectedComponent === 2) {
     return (
       <SelectableQuizComponent 
-        onQuizReset={handelQuizReset} 
+        onQuizReset={handelQuizReset}
+        isRandomQuiz={selectedComponent === 1}
       />
     );
   }

@@ -7,7 +7,7 @@ function InfoComponent(props: IInfoProps): ReactElement {
   return (
     <Col>
       <Row className="pt-2">
-        <Col>{props.answeredQuestionCount} / {props.totalQuestionCount}</Col>
+        <Col>{props.answeredQuestionCount} / {props.maxQuestionCount}</Col>
         <Col>Correct: {props.correctAnswersCount}</Col>
         <Col></Col>
         <Col></Col>

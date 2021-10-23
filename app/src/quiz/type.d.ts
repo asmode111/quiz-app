@@ -21,7 +21,7 @@ interface IAnswersProps {
 }
 
 interface IInfoProps {
-  totalQuestionCount: number;
+  maxQuestionCount: number;
   answeredQuestionCount: number;
   correctAnswersCount: number;
 }
@@ -36,4 +36,9 @@ interface ITimer {
   hours: number;
   minutes: number;
   seconds: number;
+}
+
+interface ISelectableQuizComponentProps {
+  onQuizReset: () => void;
+  isRandomQuiz: boolean;
 }

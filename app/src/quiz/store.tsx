@@ -5,6 +5,7 @@ import resetQuizReducer from "./slices/resetQuizSlice";
 import selectedAnswersReducer from "./slices/selectedAnswersSlice";
 import answerSelectedReducer from "./slices/answerSelectedSlice";
 import correctAnswersCountReducer from "./slices/correctAnswersCountSlice";
+import maxQuestionCountReducer from "./slices/maxQuestionCountSlice";
 import answerResultSliceReducer from "./slices/answerResultSlice";
 import quizOverSliceReducer from "./slices/quizOverSlice";
 
@@ -15,6 +16,7 @@ const store = configureStore({
     selectedAnswers: selectedAnswersReducer,
     answerSelected: answerSelectedReducer,
     correctAnswersCount: correctAnswersCountReducer,
+    maxQuestionCount: maxQuestionCountReducer,
     answerResult: answerResultSliceReducer,
     quizOver: quizOverSliceReducer
   }
@@ -27,6 +29,7 @@ export const selectIsResetClicked = (state: RootState) => state.resetQuiz.isRese
 export const selectSelectedAnswers = (state: RootState) => state.selectedAnswers.selectedAnswers;
 export const selectIsAnswerSelected = (state: RootState) => state.answerSelected.isAnswerSelected;
 export const selectCorrectAnswersCount = (state: RootState) => state.correctAnswersCount.correctAnswersCount;
+export const selectMaxQuestionCount = (state: RootState) => state.maxQuestionCount.maxQuestionCount;
 export const selectAnswerResult = (state: RootState) => state.answerResult.answerResult;
 export const selectIsQuizOver = (state: RootState) => state.quizOver.isQuizOver;
 

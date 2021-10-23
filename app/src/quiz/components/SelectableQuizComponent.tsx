@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container as ServiceContainer } from "typedi";
 
@@ -11,15 +11,17 @@ import {
   selectSelectedAnswers, 
   selectIsAnswerSelected,
   selectCorrectAnswersCount,
+  selectMaxQuestionCount,
   selectAnswerResult,
   selectIsQuizOver
 } from "../store";
 import { setQuestion } from "../slices/questionSlice";
 import { setIsResetClicked, resetIsResetClicked } from "../slices/resetQuizSlice";
-import { setIsQuizOver, resetIsQuizOver } from "../slices/quizOverSlice";
+import { setIsQuizOver } from "../slices/quizOverSlice";
 import { resetSelectedAnswers } from "../slices/selectedAnswersSlice";
 import { enableIsAnswerSelected, resetIsAnswerSelected } from "../slices/answerSelectedSlice";
 import { setCorrectAnswersCount, resetCorrectAnswersCount } from "../slices/correctAnswersCountSlice";
+import { setMaxQuestionCount } from "../slices/maxQuestionCountSlice";
 import {
   resetAnswerResult,
   setWrongAnswerResult,
@@ -45,27 +47,31 @@ const timerService = ServiceContainer.get(TimerService);
 
 import "../assets/Quiz.css";
 
-function SelectableQuizComponent(props: any): ReactElement {
+function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactElement {
   const dispatch = useDispatch();
   const question = useSelector(selectQuestion);
   const isResetClicked = useSelector(selectIsResetClicked);
   const selectedAnswers = useSelector(selectSelectedAnswers);
   const isAnswerSelected = useSelector(selectIsAnswerSelected);
   const correctAnswersCount = useSelector(selectCorrectAnswersCount);
-  const totalQuestionCount = questionService.getMaxQuestionCount();
+  const maxQuestionCount = useSelector(selectMaxQuestionCount);
   const answeredQuestionCount = questionService.getAnsweredQuestionsCount();
   const answerResult = useSelector(selectAnswerResult);
   const isQuizOver = useSelector(selectIsQuizOver);
 
+  questionService.getMaxQuestionCount(props.isRandomQuiz, function (maxQuestionCount: number) {
+    dispatch(setMaxQuestionCount(maxQuestionCount));
+  });
+
   React.useEffect(() => {
-    if (timerService.isTimeout()) {
+    if (isTimeout()) {
       dispatch(setIsQuizOver());
     } else {
       questionService.getCurrentQuestion(function (currentQuestion: IQuestion | null) {
         if (currentQuestion) {
           dispatch(setQuestion(currentQuestion));
         } else {
-          questionService.getRandomQuestion(function (currentQuestion: IQuestion) {
+          getQuestion(question, function (currentQuestion: IQuestion) {
             dispatch(setQuestion(currentQuestion));
           });
         }
@@ -76,13 +82,21 @@ function SelectableQuizComponent(props: any): ReactElement {
     }
   }, []);
 
+  const isTimeout = (): boolean => {
+    if (!props.isRandomQuiz) {
+      return false;
+    }
+
+    return timerService.isTimeout();
+  };
+
   const checkAnswer = () => {
     if (question === null) {
       return;
     }
 
     questionService.saveAnsweredQuestion(question.id);
-    questionService.getRandomQuestion(() => ({}));
+    getQuestion(null, () => ({}));
 
     if (answerService.isAnswerCorrect(selectedAnswers, question.correct_answers)) {
       dispatch(setWrongAnswerResult(question.correct_answers));
@@ -98,12 +112,13 @@ function SelectableQuizComponent(props: any): ReactElement {
       return;
     }
 
-    if (!questionService.isQuizFinished() && !timerService.isTimeout()) {
-      questionService.getRandomQuestion(function (nextQuestion: IQuestion) {
+    if (!questionService.isQuizFinished(maxQuestionCount) && !isTimeout()) {
+      getQuestion(question, function (nextQuestion: IQuestion) {
         dispatch(setQuestion(nextQuestion));
         dispatch(resetAnswerResult());
         dispatch(resetSelectedAnswers());
         dispatch(resetIsAnswerSelected());
+        questionService.saveAnsweredQuestion(question.id);
       });
     } else {
       dispatch(setIsQuizOver());
@@ -120,8 +135,29 @@ function SelectableQuizComponent(props: any): ReactElement {
       dispatch(resetAnswerResult());
       dispatch(resetCorrectAnswersCount());
       dispatch(resetSelectedAnswers());
-      dispatch(resetIsAnswerSelected());
+      //dispatch(resetIsAnswerSelected());
       props.onQuizReset();
+    }
+  };
+
+  const getQuestion = (currentQuestion: IQuestion | null, callback: (question: IQuestion) => void): void => {
+    if (props.isRandomQuiz) {
+      console.log("random");
+      questionService.getRandomQuestion(function (question: IQuestion) {
+        callback(question);
+      });
+    } else {
+      if (answeredQuestionCount === 0 || currentQuestion === null) {
+        console.log("all first");
+        questionService.getFirstQuestion(function (question: IQuestion) {
+          callback(question);
+        });
+      } else {
+        console.log("all later");
+        questionService.getNextQuestion(currentQuestion.id, function (question: IQuestion) {
+          callback(question);
+        });
+      }
     }
   };
 
@@ -129,7 +165,7 @@ function SelectableQuizComponent(props: any): ReactElement {
     return (
       <Container fluid className="container mt-5">
         <Row>Quiz is over.</Row>
-        <Row>{correctAnswersCount} correct answers out of {totalQuestionCount}.</Row>
+        <Row>{correctAnswersCount} correct answers out of {maxQuestionCount}.</Row>
         <ResetButtonComponent onResetClick={() => { resetQuiz(); }} />
       </Container>
     );
@@ -137,15 +173,17 @@ function SelectableQuizComponent(props: any): ReactElement {
 
   return (
     <Container fluid className="container mt-5">
-      <Row>
-        <TimerComponent 
-          isResetClicked={isResetClicked}
-          onTimerReset={() => { dispatch(resetIsResetClicked()); }}
-        />
-      </Row>
+      {props.isRandomQuiz && 
+        <Row>
+          <TimerComponent 
+            isResetClicked={isResetClicked}
+            onTimerReset={() => { dispatch(resetIsResetClicked()); }}
+          />
+        </Row>
+      }
       <Row>
         <InfoComponent
-          totalQuestionCount={totalQuestionCount}
+          maxQuestionCount={maxQuestionCount}
           answeredQuestionCount={answeredQuestionCount}
           correctAnswersCount={correctAnswersCount}
         />

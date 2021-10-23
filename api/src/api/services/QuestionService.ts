@@ -6,14 +6,17 @@ class QuestionService {
 
   constructor(private readonly questionRepository: QuestionRepository) { }
 
-  public getFirstQuestion(callback: (row: any) => void): void {
-    this.questionRepository.getFirstQuestion((result) => {
+  private questionTypeSelectable = 1;
+  private questionTypeEssay = 2;
+
+  public getFirstQuestion(questionType: number, callback: (row: any) => void): void {
+    this.questionRepository.getFirstQuestion(questionType, (result) => {
       callback(this.prepareResult(result));
     });
   }
 
-  public getNextQuestion(questionId: number, callback: (row: any) => void): void {
-    this.questionRepository.getNextQuestion(questionId, (result) => {
+  public getNextQuestion(questionId: number, questionType: number, callback: (row: any) => void): void {
+    this.questionRepository.getNextQuestion(questionId, questionType, (result) => {
       callback(this.prepareResult(result));
     });
   }
@@ -24,21 +27,25 @@ class QuestionService {
     });
   }
 
-  public getTotalQuestionCount(callback: (row: any) => void): void {
-    this.questionRepository.getTotalQuestionCount((result) => {
+  public getTotalQuestionCount(questionType: number, callback: (row: any) => void): void {
+    this.questionRepository.getTotalQuestionCount(questionType, (result) => {
       callback(result);
     });
   }
 
   private prepareResult(result: any): any {
-    result.correct_answers = this.prepareCorrectAnswer(result.correct_answer);
+    result.correct_answers = this.prepareCorrectAnswer(result.correct_answer, result.question_type);
     result.answers = this.prepareAnswers(result.answers);
     result = this.unsetUnnecessaryFields(result);
 
     return result;
   }
 
-  private prepareCorrectAnswer(correctAnswers: string): any {
+  private prepareCorrectAnswer(correctAnswers: string, questionType: number): any {
+    if (questionType !== this.questionTypeSelectable) {
+      return correctAnswers.trim();
+    }
+
     return correctAnswers.trim().split("");
   }
 

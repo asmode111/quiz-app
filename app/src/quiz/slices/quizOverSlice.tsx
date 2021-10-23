@@ -14,13 +14,10 @@ export const quizOverSlice = createSlice({
   reducers: {
     setIsQuizOver: (state: any) => {
       state.isQuizOver = true;
-    },
-    resetIsQuizOver: (state: any) => {
-      state.isQuizOver = false;
     }
   }
 });
 
-export const { setIsQuizOver, resetIsQuizOver } = quizOverSlice.actions;
+export const { setIsQuizOver } = quizOverSlice.actions;
 
 export default quizOverSlice.reducer;

@@ -20,15 +20,59 @@ class QuestionService {
     localStorage.setItem("quiz_currentQuestion", JSON.stringify(data));
   }
 
-  public getMaxQuestionCount(): number {
-    return this.maxQuestionCount;
+  public getMaxQuestionCount(isRandomQuiz: boolean, callback: (row: number) => void): void {
+    if (isRandomQuiz) {
+      callback(this.maxQuestionCount);
+    } else {
+      axios.get("http://localhost:8081/api/total-question-count", {
+        params: {
+          questionType: this.defaultQuestionType
+        },
+        headers: {
+          "Content-Type": "application/json"
+        },
+        timeout: 1000
+      }).then(response => {
+        callback(response.data);
+      });
+    }
   }
-
+  
   public getRandomQuestion(callback: (row: IQuestion) => void): void {
     const answeredQuestionIds = this.getAnsweredQuestionIds();
     axios.get<IQuestion>("http://localhost:8081/api/question/random", {
       params: {
         excludedQuestionIds: answeredQuestionIds,
+        questionType: this.defaultQuestionType
+      },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      timeout: 1000
+    }).then(response => {
+      this.setCurrentQuestion(response.data);
+      callback(response.data);
+    });
+  }
+
+  public getFirstQuestion(callback: (row: IQuestion) => void): void {
+    axios.get<IQuestion>("http://localhost:8081/api/question", {
+      params: {
+        questionType: this.defaultQuestionType
+      },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      timeout: 1000
+    }).then(response => {
+      this.setCurrentQuestion(response.data);
+      callback(response.data);
+    });
+  }
+
+  public getNextQuestion(currentQuestionId: number, callback: (row: IQuestion) => void): void {
+    axios.get<IQuestion>("http://localhost:8081/api/question/" + currentQuestionId, {
+      params: {
         questionType: this.defaultQuestionType
       },
       headers: {
@@ -71,8 +115,8 @@ class QuestionService {
     return _answeredQuestionIds.length;
   }
 
-  public isQuizFinished(): boolean {
-    return this.getAnsweredQuestionsCount() >= this.maxQuestionCount;
+  public isQuizFinished(maxQuestionCount: number): boolean {
+    return this.getAnsweredQuestionsCount() >= maxQuestionCount;
   }
 
   public resetData(): void {
