@@ -35,15 +35,16 @@ class QuestionRepository {
     });
   }
 
-  public getRandomQuestion(excludedQuestionIds: string, callback: (row: any) => void): void {
-    console.log("excludedQuestionIds", excludedQuestionIds);
+  public getRandomQuestion(excludedQuestionIds: string, questionType: number, callback: (row: any) => void): void {
+    console.log("questionType", questionType);
     const sql = `SELECT id, question, question_body, question_raw, answers, correct_answer 
                 FROM questions 
                 WHERE id NOT IN (` + excludedQuestionIds + `) 
+                  AND question_type = ?
                 ORDER BY RANDOM() 
                 LIMIT 1 `;
 
-    this.connection.get(sql, [], (err: any, row: any) => {
+    this.connection.get(sql, [questionType], (err: any, row: any) => {
       if (err) {
         throw err;
       }

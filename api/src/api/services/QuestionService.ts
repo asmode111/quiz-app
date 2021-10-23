@@ -18,8 +18,8 @@ class QuestionService {
     });
   }
 
-  public getRandomQuestion(excludedQuestionIds: string, callback: (row: any) => void): void {
-    this.questionRepository.getRandomQuestion(excludedQuestionIds, (result) => {
+  public getRandomQuestion(excludedQuestionIds: string, questionType: number, callback: (row: any) => void): void {
+    this.questionRepository.getRandomQuestion(excludedQuestionIds, questionType, (result) => {
       callback(this.prepareResult(result));
     });
   }

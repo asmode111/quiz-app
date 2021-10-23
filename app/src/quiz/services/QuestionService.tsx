@@ -5,6 +5,7 @@ import { Service } from "typedi";
 class QuestionService {
 
   private maxQuestionCount = 75;
+  private defaultQuestionType = 1; // 1: selected 2: textarea
 
   public getCurrentQuestion(callback: (currentQuestion: IQuestion | null) => void): void {
     const currentQuestion = localStorage.getItem("quiz_currentQuestion");
@@ -27,7 +28,8 @@ class QuestionService {
     const answeredQuestionIds = this.getAnsweredQuestionIds();
     axios.get<IQuestion>("http://localhost:8081/api/question/random", {
       params: {
-        excludedQuestionIds: answeredQuestionIds
+        excludedQuestionIds: answeredQuestionIds,
+        questionType: this.defaultQuestionType
       },
       headers: {
         "Content-Type": "application/json"

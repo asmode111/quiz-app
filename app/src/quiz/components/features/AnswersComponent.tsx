@@ -8,7 +8,7 @@ import {
   setSelectedAnswers, 
   removeSelectedAnswer, 
   resetSelectedAnswers 
-} from "../slices/selectedAnswersSlice";
+} from "../../slices/selectedAnswersSlice";
 
 function AnswersComponent(props: IAnswersProps): ReactElement {
   const dispatch = useDispatch();

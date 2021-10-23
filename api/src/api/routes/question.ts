@@ -13,7 +13,8 @@ export default (app: Router) => {
 
   app.get("/question/random", (request: Request, response: Response) => {
     const excludedQuestionIds: any = request.query.excludedQuestionIds;
-    questionService.getRandomQuestion(excludedQuestionIds, function (result) {
+    const questionType: any = request.query.questionType;
+    questionService.getRandomQuestion(excludedQuestionIds, questionType, function (result) {
       response.status(200).send(result).end();
     });
   });

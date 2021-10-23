@@ -4,7 +4,7 @@ import { Container as ServiceContainer } from "typedi";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { TimerService } from "../services/TimerService";
+import { TimerService } from "../../services/TimerService";
 const timerService = ServiceContainer.get(TimerService);
 
 function TimerComponent(props: any): ReactElement {
