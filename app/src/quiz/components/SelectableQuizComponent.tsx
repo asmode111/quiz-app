@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container as ServiceContainer } from "typedi";
 
@@ -44,8 +44,6 @@ const answerService = ServiceContainer.get(AnswerService);
 
 import { TimerService } from "../services/TimerService";
 const timerService = ServiceContainer.get(TimerService);
-
-import "../assets/Quiz.css";
 
 function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactElement {
   const dispatch = useDispatch();
@@ -135,7 +133,6 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
       dispatch(resetAnswerResult());
       dispatch(resetCorrectAnswersCount());
       dispatch(resetSelectedAnswers());
-      //dispatch(resetIsAnswerSelected());
       props.onQuizReset();
     }
   };

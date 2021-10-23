@@ -1,4 +1,5 @@
-import React, { ReactElement, useState, useEffect } from "react";
+import { ReactElement, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -8,24 +9,28 @@ import SelectableQuizComponent from "./components/SelectableQuizComponent";
 
 import "./assets/Quiz.css";
 
+import { selectSelectedComponent } from "./store";
+import { setSelectedComponent, resetSelectedComponent } from "./slices/selectedComponentSlice";
+
 function Quiz(): ReactElement {
-  const [selectedComponent, setSelectedComponent] = useState<number>(0);
+  const dispatch = useDispatch();
+  const selectedComponent = useSelector(selectSelectedComponent);
 
   useEffect(() => {
     const savedSelectedQuizType = localStorage.getItem("quiz_selectedQuizType");
     if (savedSelectedQuizType) {
-      setSelectedComponent(parseInt(savedSelectedQuizType));
+      dispatch(setSelectedComponent(parseInt(savedSelectedQuizType)));
     }
   });
   
   const handleQuizTypeComponentSelection = (selectedQuizType: number) => {
+    dispatch(setSelectedComponent(selectedQuizType));
     localStorage.setItem("quiz_selectedQuizType", selectedQuizType.toString());
-    setSelectedComponent(selectedQuizType);
   };
   
   const handelQuizReset = () => {
     localStorage.removeItem("quiz_selectedQuizType");
-    setSelectedComponent(0);
+    dispatch(resetSelectedComponent());
   };
 
   const defaultComponent = (): ReactElement => {
