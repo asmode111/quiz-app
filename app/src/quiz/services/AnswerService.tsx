@@ -5,7 +5,18 @@ class AnswerService {
   public isAnswerCorrect(selectedAnswers: any, correctAnswers: any): boolean {
     const intersection = selectedAnswers.filter((x: string) => !correctAnswers.includes(x));
 
-    return selectedAnswers.length !== correctAnswers.length || intersection.length != 0;
+    return !(selectedAnswers.length !== correctAnswers.length || intersection.length != 0);
+  }
+  
+  public isEssayAnswerCorrect(givenEssayAnswer: string|null, correctAnswers: any): boolean {
+    if (givenEssayAnswer === null) {
+      return false;
+    }
+
+    console.log("givenEssayAnswer", givenEssayAnswer);
+    console.log("correctAnswers", correctAnswers);
+    console.log(givenEssayAnswer.normalize() === correctAnswers.normalize());
+    return givenEssayAnswer.normalize() === correctAnswers.normalize();
   }
 
   public getCorrectAnswersCount(): number {

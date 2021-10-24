@@ -9,6 +9,7 @@ import maxQuestionCountReducer from "./slices/maxQuestionCountSlice";
 import answerResultSliceReducer from "./slices/answerResultSlice";
 import quizOverSliceReducer from "./slices/quizOverSlice";
 import selectedComponentSliceReducer from "./slices/selectedComponentSlice";
+import essayAnswerSliceReducer from "./slices/essayAnswerSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,7 +21,8 @@ const store = configureStore({
     maxQuestionCount: maxQuestionCountReducer,
     answerResult: answerResultSliceReducer,
     quizOver: quizOverSliceReducer,
-    selectedComponent: selectedComponentSliceReducer
+    selectedComponent: selectedComponentSliceReducer,
+    essayAnswer: essayAnswerSliceReducer
   }
 });
 
@@ -35,5 +37,6 @@ export const selectMaxQuestionCount = (state: RootState) => state.maxQuestionCou
 export const selectAnswerResult = (state: RootState) => state.answerResult.answerResult;
 export const selectIsQuizOver = (state: RootState) => state.quizOver.isQuizOver;
 export const selectSelectedComponent = (state: RootState) => state.selectedComponent.selectedComponent;
+export const selectEssayAnswer = (state: RootState) => state.essayAnswer.essayAnswer;
 
 export default store;

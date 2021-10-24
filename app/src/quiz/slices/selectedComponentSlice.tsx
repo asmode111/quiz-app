@@ -1,11 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export const SELECT_QUIZ_COMPONENT = 0;
+export const SELECTABLE_RANDOM_QUIZ_COMPONENT = 1;
+export const SELECTABLE_ALL_QUIZ_COMPONENT = 2;
+export const ESSAY_QUIZ_COMPONENT = 3;
+
 interface SelectedComponentSliceState {
   selectedComponent: number;
 }
 
 const initialState: SelectedComponentSliceState = {
-  selectedComponent: 0,
+  selectedComponent: 0, // SelectQuizComponent
 };
 
 export const selectedComponentSlice = createSlice({

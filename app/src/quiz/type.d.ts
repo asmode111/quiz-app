@@ -42,3 +42,7 @@ interface ISelectableQuizComponentProps {
   onQuizReset: () => void;
   isRandomQuiz: boolean;
 }
+
+interface IEssayQuizComponentProps {
+  onQuizReset: () => void;
+}

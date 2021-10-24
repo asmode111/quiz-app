@@ -6,11 +6,19 @@ import Row from "react-bootstrap/Row";
 
 import SelectQuizComponent from "./components/SelectQuizComponent";
 import SelectableQuizComponent from "./components/SelectableQuizComponent";
+import EssayQuizComponent from "./components/EssayQuizComponent";
 
 import "./assets/Quiz.css";
 
 import { selectSelectedComponent } from "./store";
-import { setSelectedComponent, resetSelectedComponent } from "./slices/selectedComponentSlice";
+import { 
+  setSelectedComponent,
+  resetSelectedComponent,
+  SELECT_QUIZ_COMPONENT,
+  SELECTABLE_RANDOM_QUIZ_COMPONENT,
+  SELECTABLE_ALL_QUIZ_COMPONENT,
+  ESSAY_QUIZ_COMPONENT 
+} from "./slices/selectedComponentSlice";
 
 function Quiz(): ReactElement {
   const dispatch = useDispatch();
@@ -44,16 +52,24 @@ function Quiz(): ReactElement {
     );
   };
 
-  if (selectedComponent === 0) {
+  if (selectedComponent === SELECT_QUIZ_COMPONENT) {
     return defaultComponent();
   }
 
-  if (selectedComponent === 1 || selectedComponent === 2) {
+  if (selectedComponent === SELECTABLE_RANDOM_QUIZ_COMPONENT 
+    || selectedComponent === SELECTABLE_ALL_QUIZ_COMPONENT
+  ) {
     return (
       <SelectableQuizComponent 
         onQuizReset={handelQuizReset}
-        isRandomQuiz={selectedComponent === 1}
+        isRandomQuiz={selectedComponent === SELECTABLE_RANDOM_QUIZ_COMPONENT}
       />
+    );
+  }
+  
+  if (selectedComponent === ESSAY_QUIZ_COMPONENT) {
+    return (
+      <EssayQuizComponent onQuizReset={handelQuizReset} />
     );
   }
 

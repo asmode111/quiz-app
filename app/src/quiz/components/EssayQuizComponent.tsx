@@ -6,9 +6,8 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
 import { 
-  selectQuestion, 
-  selectIsResetClicked, 
-  selectSelectedAnswers, 
+  selectQuestion,
+  selectEssayAnswer, 
   selectIsAnswerSelected,
   selectCorrectAnswersCount,
   selectMaxQuestionCount,
@@ -16,9 +15,9 @@ import {
   selectIsQuizOver
 } from "../store";
 import { setQuestion } from "../slices/questionSlice";
-import { setIsResetClicked, resetIsResetClicked } from "../slices/resetQuizSlice";
+import { setIsResetClicked } from "../slices/resetQuizSlice";
 import { setIsQuizOver } from "../slices/quizOverSlice";
-import { resetSelectedAnswers } from "../slices/selectedAnswersSlice";
+import { resetEssayAnswer } from "../slices/essayAnswerSlice";
 import { enableIsAnswerSelected, resetIsAnswerSelected } from "../slices/answerSelectedSlice";
 import { setCorrectAnswersCount, resetCorrectAnswersCount } from "../slices/correctAnswersCountSlice";
 import { setMaxQuestionCount } from "../slices/maxQuestionCountSlice";
@@ -31,10 +30,9 @@ import {
 import NavigationButtonsComponent from "./features/NavigationButtonsComponent";
 import ResetButtonComponent from "./features/ResetButtonComponent";
 import QuestionComponent from "./features/QuestionComponent";
-import AnswersComponent from "./features/AnswersComponent";
+import EssayAnswersComponent from "./features/EssayAnswersComponent";
 import AnswerResultComponent from "./features/AnswerResultComponent";
 import InfoComponent from "./features/InfoComponent";
-import TimerComponent from "./features/TimerComponent";
 
 import { QuestionService } from "../services/QuestionService";
 const questionService = ServiceContainer.get(QuestionService);
@@ -42,14 +40,10 @@ const questionService = ServiceContainer.get(QuestionService);
 import { AnswerService } from "../services/AnswerService";
 const answerService = ServiceContainer.get(AnswerService);
 
-import { TimerService } from "../services/TimerService";
-const timerService = ServiceContainer.get(TimerService);
-
-function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactElement {
+function EssayQuizComponent(props: IEssayQuizComponentProps): ReactElement {
   const dispatch = useDispatch();
   const question = useSelector(selectQuestion);
-  const isResetClicked = useSelector(selectIsResetClicked);
-  const selectedAnswers = useSelector(selectSelectedAnswers);
+  const givenEssayAnswer = useSelector(selectEssayAnswer);
   const isAnswerSelected = useSelector(selectIsAnswerSelected);
   const correctAnswersCount = useSelector(selectCorrectAnswersCount);
   const maxQuestionCount = useSelector(selectMaxQuestionCount);
@@ -57,36 +51,24 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
   const answerResult = useSelector(selectAnswerResult);
   const isQuizOver = useSelector(selectIsQuizOver);
 
-  questionService.getMaxQuestionCount(props.isRandomQuiz, function (maxQuestionCount: number) {
+  questionService.getMaxEssayQuestionCount(function (maxQuestionCount: number) {
     dispatch(setMaxQuestionCount(maxQuestionCount));
   });
 
   React.useEffect(() => {
-    if (isTimeout()) {
-      dispatch(setIsQuizOver());
+    questionService.getCurrentQuestion(function (currentQuestion: IQuestion | null) {
+    if (currentQuestion) {
+        dispatch(setQuestion(currentQuestion));
     } else {
-      questionService.getCurrentQuestion(function (currentQuestion: IQuestion | null) {
-        if (currentQuestion) {
-          dispatch(setQuestion(currentQuestion));
-        } else {
-          getQuestion(question, function (currentQuestion: IQuestion) {
-            dispatch(setQuestion(currentQuestion));
-          });
-        }
-      });
-  
-      dispatch(setCorrectAnswersCount(answerService.getCorrectAnswersCount()));
-      dispatch(resetAnswerResult());
+        getQuestion(question, function (currentQuestion: IQuestion) {
+        dispatch(setQuestion(currentQuestion));
+        });
     }
+    });
+
+    dispatch(setCorrectAnswersCount(answerService.getCorrectAnswersCount()));
+    dispatch(resetAnswerResult());
   }, []);
-
-  const isTimeout = (): boolean => {
-    if (!props.isRandomQuiz) {
-      return false;
-    }
-
-    return timerService.isTimeout();
-  };
 
   const checkAnswer = () => {
     if (question === null) {
@@ -96,7 +78,7 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
     questionService.saveAnsweredQuestion(question.id);
     getQuestion(null, () => ({}));
 
-    if (!answerService.isAnswerCorrect(selectedAnswers, question.correct_answers)) {
+    if (!answerService.isEssayAnswerCorrect(givenEssayAnswer, question.correct_answers)) {
       dispatch(setWrongAnswerResult(question.correct_answers));
       return;
     }
@@ -110,11 +92,11 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
       return;
     }
 
-    if (!questionService.isQuizFinished(maxQuestionCount) && !isTimeout()) {
+    if (!questionService.isQuizFinished(maxQuestionCount)) {
       getQuestion(question, function (nextQuestion: IQuestion) {
         dispatch(setQuestion(nextQuestion));
         dispatch(resetAnswerResult());
-        dispatch(resetSelectedAnswers());
+        dispatch(resetEssayAnswer());
         dispatch(resetIsAnswerSelected());
         questionService.saveAnsweredQuestion(question.id);
       });
@@ -129,29 +111,22 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
       dispatch(setIsResetClicked());
       questionService.resetData();
       answerService.resetData();
-      timerService.resetTimer();
       dispatch(resetAnswerResult());
       dispatch(resetCorrectAnswersCount());
-      dispatch(resetSelectedAnswers());
+      dispatch(resetEssayAnswer());
       props.onQuizReset();
     }
   };
 
   const getQuestion = (currentQuestion: IQuestion | null, callback: (question: IQuestion) => void): void => {
-    if (props.isRandomQuiz) {
-      questionService.getRandomQuestion(function (question: IQuestion) {
+    if (answeredQuestionCount === 0 || currentQuestion === null) {
+      questionService.getFirstEssayQuestion(function (question: IQuestion) {
         callback(question);
       });
     } else {
-      if (answeredQuestionCount === 0 || currentQuestion === null) {
-        questionService.getFirstQuestion(function (question: IQuestion) {
-          callback(question);
-        });
-      } else {
-        questionService.getNextQuestion(currentQuestion.id, function (question: IQuestion) {
-          callback(question);
-        });
-      }
+      questionService.getNextEssayQuestion(currentQuestion.id, function (question: IQuestion) {
+        callback(question);
+      });
     }
   };
 
@@ -167,14 +142,6 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
 
   return (
     <Container fluid className="container mt-5">
-      {props.isRandomQuiz && 
-        <Row>
-          <TimerComponent 
-            isResetClicked={isResetClicked}
-            onTimerReset={() => { dispatch(resetIsResetClicked()); }}
-          />
-        </Row>
-      }
       <Row>
         <InfoComponent
           maxQuestionCount={maxQuestionCount}
@@ -191,7 +158,7 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
         />
       }
       {question !== null &&
-        <AnswersComponent
+        <EssayAnswersComponent
           questionId={question.id}
           answers={question.answers}
           correctAnswers={question.correct_answers}
@@ -214,4 +181,4 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
   );
 }
 
-export default SelectableQuizComponent;
+export default EssayQuizComponent;
