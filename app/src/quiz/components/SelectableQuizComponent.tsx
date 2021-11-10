@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container as ServiceContainer } from "typedi";
 
@@ -56,6 +56,7 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
   const answeredQuestionCount = questionService.getAnsweredQuestionsCount();
   const answerResult = useSelector(selectAnswerResult);
   const isQuizOver = useSelector(selectIsQuizOver);
+  const [isAnswerClicked, setIsAnswerClicked] = useState(false);
 
   questionService.getMaxQuestionCount(props.isRandomQuiz, function (maxQuestionCount: number) {
     dispatch(setMaxQuestionCount(maxQuestionCount));
@@ -93,6 +94,7 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
       return;
     }
 
+    setIsAnswerClicked(true);
     questionService.saveAnsweredQuestion(question.id);
     getQuestion(null, () => ({}));
 
@@ -110,14 +112,17 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
       return;
     }
 
+    if (!isAnswerClicked) {
+      questionService.saveAnsweredQuestion(question.id);
+    }
+    setIsAnswerClicked(false);
+
     if (!questionService.isQuizFinished(maxQuestionCount) && !isTimeout()) {
       getQuestion(question, function (nextQuestion: IQuestion) {
         dispatch(setQuestion(nextQuestion));
         dispatch(resetAnswerResult());
         dispatch(resetSelectedAnswers());
         dispatch(resetIsAnswerSelected());
-        // TODO: Beware of why saveAnsweredQuestion was called here. :thinking_face
-        // questionService.saveAnsweredQuestion(question.id);
       });
     } else {
       dispatch(setIsQuizOver());
@@ -126,7 +131,7 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
 
   const resetQuiz = () => {
     const isResetConfirmed = window.confirm("Are you sure to reset the quiz?");
-    if (isResetConfirmed == true) {
+    if (isResetConfirmed) {
       dispatch(setIsResetClicked());
       questionService.resetData();
       answerService.resetData();
