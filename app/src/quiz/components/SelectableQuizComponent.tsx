@@ -116,7 +116,8 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
         dispatch(resetAnswerResult());
         dispatch(resetSelectedAnswers());
         dispatch(resetIsAnswerSelected());
-        questionService.saveAnsweredQuestion(question.id);
+        // TODO: Beware of why saveAnsweredQuestion was called here. :thinking_face
+        // questionService.saveAnsweredQuestion(question.id);
       });
     } else {
       dispatch(setIsQuizOver());
