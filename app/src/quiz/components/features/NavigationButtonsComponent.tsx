@@ -11,7 +11,7 @@ function NavigationButtons(props: any): ReactElement {
         {
           <Button
             onClick={props.onAnswerClick}
-            disabled={props.isAnswered || !props.isAnswerSelected}
+            disabled={props.isAnswered}
             className="btn-block w-100"
             variant="warning">
             Answer

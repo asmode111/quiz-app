@@ -107,6 +107,21 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
     dispatch(setCorrectAnswerResult());
   };
 
+  const checkAnswerSelected = () => {
+    if (isAnswerClicked) {
+      getNextQuestion();
+
+      return;
+    }
+
+    const isResetConfirmed = window.confirm("The current question is not answered. Are you sure to pass to the next question?");
+    if (isResetConfirmed) {
+      getNextQuestion();
+    }
+
+    return;
+  };
+
   const getNextQuestion = () => {
     if (question === null) {
       return;
@@ -210,9 +225,8 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
       {answerResult !== null &&
         <NavigationButtonsComponent
           isAnswered={answerResult.isAnswered}
-          isAnswerSelected={isAnswerSelected}
           onAnswerClick={() => { checkAnswer(); }}
-          onNextClick={() => { getNextQuestion(); }}
+          onNextClick={() => { checkAnswerSelected(); }}
         />
       }
       <ResetButtonComponent onResetClick={() => { resetQuiz(); }}>{{}}</ResetButtonComponent>
