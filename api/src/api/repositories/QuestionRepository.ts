@@ -24,6 +24,21 @@ class QuestionRepository {
     });
   }
 
+  public getQuestion(questionId: number, callback: (row: any) => void): void {
+    const sql = `SELECT id, question, question_body, question_raw, answers, correct_answer, question_type 
+                FROM questions 
+                WHERE id = ?
+                LIMIT 1`;
+
+    this.connection.get(sql, [questionId], (err: any, row: any) => {
+      if (err) {
+        throw err;
+      }
+
+      callback(row);
+    });
+  }
+  
   public getNextQuestion(questionId: number, questionType: number, callback: (row: any) => void): void {
     const sql = `SELECT id, question, question_body, question_raw, answers, correct_answer, question_type 
                 FROM questions 

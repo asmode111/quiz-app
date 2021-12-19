@@ -15,6 +15,12 @@ class QuestionService {
     });
   }
 
+  public getQuestion(questionId: number, callback: (row: any) => void): void {
+    this.questionRepository.getQuestion(questionId, (result) => {
+      callback(this.prepareResult(result));
+    });
+  }
+
   public getNextQuestion(questionId: number, questionType: number, callback: (row: any) => void): void {
     this.questionRepository.getNextQuestion(questionId, questionType, (result) => {
       callback(this.prepareResult(result));

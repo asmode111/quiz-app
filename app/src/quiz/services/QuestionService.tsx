@@ -101,7 +101,7 @@ class QuestionService {
   }
 
   public getNextQuestion(currentQuestionId: number, callback: (row: IQuestion) => void): void {
-    axios.get<IQuestion>("http://localhost:8081/api/question/" + currentQuestionId, {
+    axios.get<IQuestion>("http://localhost:8081/api/question/next/" + currentQuestionId, {
       params: {
         questionType: this.selectableQuestionType
       },
@@ -116,7 +116,7 @@ class QuestionService {
   }
 
   public getNextEssayQuestion(currentQuestionId: number, callback: (row: IQuestion) => void): void {
-    axios.get<IQuestion>("http://localhost:8081/api/question/" + currentQuestionId, {
+    axios.get<IQuestion>("http://localhost:8081/api/question/next/" + currentQuestionId, {
       params: {
         questionType: this.essayQuestionType
       },

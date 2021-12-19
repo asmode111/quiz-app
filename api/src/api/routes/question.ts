@@ -27,10 +27,17 @@ export default (app: Router) => {
     });
   });
 
-  app.get("/question/:id", (request: Request, response: Response) => {
+  app.get("/question/next/:id", (request: Request, response: Response) => {
     const questionId: number = +request.params.id;
     const questionType: any = request.query.questionType;
     questionService.getNextQuestion(questionId, questionType, function (result) {
+      response.status(200).send(result).end();
+    });
+  });
+
+  app.get("/question/:id", (request: Request, response: Response) => {
+    const questionId: number = +request.params.id;
+    questionService.getQuestion(questionId, function (result) {
       response.status(200).send(result).end();
     });
   });
