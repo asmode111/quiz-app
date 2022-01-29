@@ -2,20 +2,17 @@ import { Service } from "typedi";
 
 @Service()
 class AnswerService {
-  public isAnswerCorrect(selectedAnswers: any, correctAnswers: any): boolean {
+  public isAnswerCorrect(selectedAnswers: Array<string>, correctAnswers: Array<string>): boolean {
     const intersection = selectedAnswers.filter((x: string) => !correctAnswers.includes(x));
 
     return !(selectedAnswers.length !== correctAnswers.length || intersection.length != 0);
   }
   
-  public isEssayAnswerCorrect(givenEssayAnswer: string|null, correctAnswers: any): boolean {
+  public isEssayAnswerCorrect(givenEssayAnswer: string|null, correctAnswers: string): boolean {
     if (givenEssayAnswer === null) {
       return false;
     }
 
-    console.log("givenEssayAnswer", givenEssayAnswer);
-    console.log("correctAnswers", correctAnswers);
-    console.log(givenEssayAnswer.normalize() === correctAnswers.normalize());
     return givenEssayAnswer.normalize() === correctAnswers.normalize();
   }
 

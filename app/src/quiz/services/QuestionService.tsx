@@ -57,7 +57,7 @@ class QuestionService {
     const answeredQuestionIds = this.getAnsweredQuestionIds();
     axios.get<IQuestion>("http://localhost:8081/api/question/random", {
       params: {
-        excludedQuestionIds: answeredQuestionIds,
+        excludedQuestionIds: answeredQuestionIds === null ? "" : answeredQuestionIds,
         questionType: this.selectableQuestionType
       },
       headers: {
@@ -132,7 +132,7 @@ class QuestionService {
 
   public saveAnsweredQuestion(questionId: number): void {
     const answeredQuestionIds = this.getAnsweredQuestionIds();
-    if (!answeredQuestionIds) {
+    if (answeredQuestionIds === null) {
       localStorage.setItem("quiz_answeredQuestionIds", JSON.stringify([questionId]));
     } else {
       answeredQuestionIds.push(questionId);
@@ -140,10 +140,10 @@ class QuestionService {
     }
   }
 
-  public getAnsweredQuestionIds(): any {
+  public getAnsweredQuestionIds(): Array<number>|null {
     const answeredQuestionIds = localStorage.getItem("quiz_answeredQuestionIds");
     if (!answeredQuestionIds) {
-      return "";
+      return null;
     }
 
     return JSON.parse(answeredQuestionIds);

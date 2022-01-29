@@ -12,7 +12,7 @@ export const quizOverSlice = createSlice({
   name: "resetQuiz",
   initialState,
   reducers: {
-    setIsQuizOver: (state: any) => {
+    setIsQuizOver: (state: QuizOverSliceState) => {
       state.isQuizOver = true;
     }
   }

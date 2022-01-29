@@ -12,7 +12,7 @@ export const questionSlice = createSlice({
   name: "question",
   initialState,
   reducers: {
-    setQuestion: (state: any, action: PayloadAction<IQuestion>) => {
+    setQuestion: (state: QuestionSliceState, action: PayloadAction<IQuestion>) => {
       state.question = action.payload;
     }
   }

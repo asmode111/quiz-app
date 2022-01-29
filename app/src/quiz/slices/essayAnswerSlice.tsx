@@ -12,11 +12,10 @@ export const essayAnswerSlice = createSlice({
   name: "essayAnswer",
   initialState,
   reducers: {
-    setEssayAnswer: (state: any, action: PayloadAction<string>) => {
+    setEssayAnswer: (state: EssayAnswerSliceState, action: PayloadAction<string>) => {
       state.essayAnswer = action.payload;
     },
-    resetEssayAnswer: (state: any) => {
-      console.log("aaaa");
+    resetEssayAnswer: (state: EssayAnswerSliceState) => {
       state.essayAnswer = null;
     }
   }

@@ -12,7 +12,7 @@ export const maxQuestionCountSlice = createSlice({
   name: "maxQuestionCount",
   initialState,
   reducers: {
-    setMaxQuestionCount: (state: any, action: PayloadAction<number>) => {
+    setMaxQuestionCount: (state: MaxQuestionCountSliceState, action: PayloadAction<number>) => {
       state.maxQuestionCount = action.payload;
     },
   }

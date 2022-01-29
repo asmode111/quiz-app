@@ -3,7 +3,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import questionReducer from "./slices/questionSlice";
 import resetQuizReducer from "./slices/resetQuizSlice";
 import selectedAnswersReducer from "./slices/selectedAnswersSlice";
-import answerSelectedReducer from "./slices/answerSelectedSlice";
 import correctAnswersCountReducer from "./slices/correctAnswersCountSlice";
 import maxQuestionCountReducer from "./slices/maxQuestionCountSlice";
 import answerResultSliceReducer from "./slices/answerResultSlice";
@@ -16,7 +15,6 @@ const store = configureStore({
     question: questionReducer,
     resetQuiz: resetQuizReducer,
     selectedAnswers: selectedAnswersReducer,
-    answerSelected: answerSelectedReducer,
     correctAnswersCount: correctAnswersCountReducer,
     maxQuestionCount: maxQuestionCountReducer,
     answerResult: answerResultSliceReducer,
@@ -28,15 +26,14 @@ const store = configureStore({
 
 type RootState = ReturnType<typeof store.getState>;
 
-export const selectQuestion = (state: RootState) => state.question.question;
-export const selectIsResetClicked = (state: RootState) => state.resetQuiz.isResetClicked;
-export const selectSelectedAnswers = (state: RootState) => state.selectedAnswers.selectedAnswers;
-export const selectIsAnswerSelected = (state: RootState) => state.answerSelected.isAnswerSelected;
-export const selectCorrectAnswersCount = (state: RootState) => state.correctAnswersCount.correctAnswersCount;
-export const selectMaxQuestionCount = (state: RootState) => state.maxQuestionCount.maxQuestionCount;
-export const selectAnswerResult = (state: RootState) => state.answerResult.answerResult;
-export const selectIsQuizOver = (state: RootState) => state.quizOver.isQuizOver;
-export const selectSelectedComponent = (state: RootState) => state.selectedComponent.selectedComponent;
-export const selectEssayAnswer = (state: RootState) => state.essayAnswer.essayAnswer;
+export const selectQuestion = (state: RootState): IQuestion|null => state.question.question;
+export const selectIsResetClicked = (state: RootState): boolean => state.resetQuiz.isResetClicked;
+export const selectSelectedAnswers = (state: RootState): Array<string> => state.selectedAnswers.selectedAnswers;
+export const selectCorrectAnswersCount = (state: RootState): number => state.correctAnswersCount.correctAnswersCount;
+export const selectMaxQuestionCount = (state: RootState): number => state.maxQuestionCount.maxQuestionCount;
+export const selectAnswerResult = (state: RootState): IAnswerResult => state.answerResult.answerResult;
+export const selectIsQuizOver = (state: RootState): boolean => state.quizOver.isQuizOver;
+export const selectSelectedComponent = (state: RootState): number => state.selectedComponent.selectedComponent;
+export const selectEssayAnswer = (state: RootState): string | null => state.essayAnswer.essayAnswer;
 
 export default store;

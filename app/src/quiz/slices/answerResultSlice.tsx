@@ -16,21 +16,21 @@ export const answerResultSlice = createSlice({
   name: "answerResult",
   initialState,
   reducers: {
-    resetAnswerResult: (state: any) => {
+    resetAnswerResult: (state: AnswerResultSliceState) => {
       state.answerResult = {
         isAnswered: false,
         isCorrect: false,
         message: ""
       };
     },
-    setWrongAnswerResult: (state: any, action: PayloadAction<string>) => {
+    setWrongAnswerResult: (state: AnswerResultSliceState, action: PayloadAction<string>) => {
       state.answerResult = {
         isAnswered: true,
         isCorrect: false,
         message: "Wrong! The correct answer is " + action.payload
       };
     },
-    setCorrectAnswerResult: (state: any) => {
+    setCorrectAnswerResult: (state: AnswerResultSliceState) => {
       state.answerResult = {
         isAnswered: true,
         isCorrect: true,

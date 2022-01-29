@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 
-function ResetButtonComponent(props: any): ReactElement {
+function ResetButtonComponent(props: IResetButtonComponentProps): ReactElement {
   return (
     <Row className="mt-2 p-2">
       <Button

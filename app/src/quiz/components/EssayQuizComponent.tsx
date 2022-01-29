@@ -8,7 +8,6 @@ import Row from "react-bootstrap/Row";
 import { 
   selectQuestion,
   selectEssayAnswer, 
-  selectIsAnswerSelected,
   selectCorrectAnswersCount,
   selectMaxQuestionCount,
   selectAnswerResult,
@@ -44,7 +43,6 @@ function EssayQuizComponent(props: IEssayQuizComponentProps): ReactElement {
   const dispatch = useDispatch();
   const question = useSelector(selectQuestion);
   const givenEssayAnswer = useSelector(selectEssayAnswer);
-  const isAnswerSelected = useSelector(selectIsAnswerSelected);
   const correctAnswersCount = useSelector(selectCorrectAnswersCount);
   const maxQuestionCount = useSelector(selectMaxQuestionCount);
   const answeredQuestionCount = questionService.getAnsweredQuestionsCount();
@@ -171,12 +169,11 @@ function EssayQuizComponent(props: IEssayQuizComponentProps): ReactElement {
       {answerResult !== null &&
         <NavigationButtonsComponent
           isAnswered={answerResult.isAnswered}
-          isAnswerSelected={isAnswerSelected}
           onAnswerClick={() => { checkAnswer(); }}
           onNextClick={() => { getNextQuestion(); }}
         />
       }
-      <ResetButtonComponent onResetClick={() => { resetQuiz(); }}>{{}}</ResetButtonComponent>
+      <ResetButtonComponent onResetClick={() => { resetQuiz(); }} />
     </Container >
   );
 }

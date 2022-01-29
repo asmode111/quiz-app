@@ -1,5 +1,4 @@
 import { Service } from "typedi";
-import { getTextOfJSDocComment } from "typescript";
 
 @Service()
 class TimerService {

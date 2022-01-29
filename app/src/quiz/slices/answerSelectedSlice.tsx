@@ -12,10 +12,10 @@ export const answerSelectedSlice = createSlice({
   name: "answerSelected",
   initialState,
   reducers: {
-    enableIsAnswerSelected: (state: any) => {
+    enableIsAnswerSelected: (state: AnswerSelectedSliceState) => {
       state.isAnswerSelected = true;
     },
-    resetIsAnswerSelected: (state: any) => {
+    resetIsAnswerSelected: (state: AnswerSelectedSliceState) => {
       state.isAnswerSelected = false;
     }
   }

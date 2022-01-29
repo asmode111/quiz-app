@@ -12,13 +12,13 @@ export const selectedAnswersSlice = createSlice({
   name: "selectedAnswers",
   initialState,
   reducers: {
-    setSelectedAnswers: (state: any, action: PayloadAction<string>) => {
+    setSelectedAnswers: (state: SelectedAnswersSliceState, action: PayloadAction<string>) => {
       state.selectedAnswers = [...state.selectedAnswers, action.payload];
     },
-    resetSelectedAnswers: (state: any) => {
+    resetSelectedAnswers: (state: SelectedAnswersSliceState) => {
       state.selectedAnswers = [];
     },
-    removeSelectedAnswer: (state: any, action: PayloadAction<string>) => {
+    removeSelectedAnswer: (state: SelectedAnswersSliceState, action: PayloadAction<string>) => {
       state.selectedAnswers = state.selectedAnswers.filter(function (ele: string) {
         return ele != action.payload;
       });

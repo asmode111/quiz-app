@@ -46,3 +46,26 @@ interface ISelectableQuizComponentProps {
 interface IEssayQuizComponentProps {
   onQuizReset: () => void;
 }
+
+interface INavigationButtonsComponentProps {
+  onAnswerClick: () => void;
+  onNextClick: () => void;
+  isAnswered: boolean;
+}
+
+interface IAnswerResultComponentProps {
+  answerResult: IAnswerResult;
+}
+
+interface ISelectQuizComponentProps {
+  onQuizTypeClicked: (type: number) => void;
+}
+
+interface IResetButtonComponentProps {
+  onResetClick: () => void;
+}
+
+interface ITimerComponentProps {
+  onTimerReset: () => void;
+  isResetClicked: boolean;
+}

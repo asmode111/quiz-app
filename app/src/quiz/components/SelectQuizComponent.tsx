@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
-function SelectQuizComponent(props: any): ReactElement {
+function SelectQuizComponent(props: ISelectQuizComponentProps): ReactElement {
 
   const handleQuizTypeRandomSelectedQuiz = (): void => {
     props.onQuizTypeClicked(1);

@@ -9,7 +9,6 @@ import {
   selectQuestion, 
   selectIsResetClicked, 
   selectSelectedAnswers, 
-  selectIsAnswerSelected,
   selectCorrectAnswersCount,
   selectMaxQuestionCount,
   selectAnswerResult,
@@ -50,7 +49,6 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
   const question = useSelector(selectQuestion);
   const isResetClicked = useSelector(selectIsResetClicked);
   const selectedAnswers = useSelector(selectSelectedAnswers);
-  const isAnswerSelected = useSelector(selectIsAnswerSelected);
   const correctAnswersCount = useSelector(selectCorrectAnswersCount);
   const maxQuestionCount = useSelector(selectMaxQuestionCount);
   const answeredQuestionCount = questionService.getAnsweredQuestionsCount();
@@ -229,7 +227,7 @@ function SelectableQuizComponent(props: ISelectableQuizComponentProps): ReactEle
           onNextClick={() => { checkAnswerSelected(); }}
         />
       }
-      <ResetButtonComponent onResetClick={() => { resetQuiz(); }}>{{}}</ResetButtonComponent>
+      <ResetButtonComponent onResetClick={() => { resetQuiz(); }} />
     </Container >
   );
 }

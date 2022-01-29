@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-function NavigationButtons(props: any): ReactElement {
+function NavigationButtonsComponent(props: INavigationButtonsComponentProps): ReactElement {
   return (
     <Row>
       <Col>
@@ -31,4 +31,4 @@ function NavigationButtons(props: any): ReactElement {
     </Row>);
 }
 
-export default NavigationButtons;
+export default NavigationButtonsComponent;

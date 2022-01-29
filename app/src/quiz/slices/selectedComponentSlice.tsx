@@ -10,17 +10,17 @@ interface SelectedComponentSliceState {
 }
 
 const initialState: SelectedComponentSliceState = {
-  selectedComponent: 0, // SelectQuizComponent
+  selectedComponent: 0,
 };
 
 export const selectedComponentSlice = createSlice({
   name: "selectedComponent",
   initialState,
   reducers: {
-    setSelectedComponent: (state: any, action: PayloadAction<number>) => {
+    setSelectedComponent: (state: SelectedComponentSliceState, action: PayloadAction<number>) => {
       state.selectedComponent = action.payload;
     },
-    resetSelectedComponent: (state: any) => {
+    resetSelectedComponent: (state: SelectedComponentSliceState) => {
       state.selectedComponent = 0;
     }
   }

@@ -12,10 +12,10 @@ export const correctAnswersCountSlice = createSlice({
   name: "correctAnswersCount",
   initialState,
   reducers: {
-    setCorrectAnswersCount: (state: any, action: PayloadAction<number>) => {
+    setCorrectAnswersCount: (state: CorrectAnswersCountSliceState, action: PayloadAction<number>) => {
       state.correctAnswersCount = action.payload;
     },
-    resetCorrectAnswersCount: (state: any) => {
+    resetCorrectAnswersCount: (state: CorrectAnswersCountSliceState) => {
       state.correctAnswersCount = 0;
     }
   }

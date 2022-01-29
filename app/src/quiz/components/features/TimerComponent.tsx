@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import { TimerService } from "../../services/TimerService";
 const timerService = ServiceContainer.get(TimerService);
 
-function TimerComponent(props: any): ReactElement {
+function TimerComponent(props: ITimerComponentProps): ReactElement {
   const [time, setTime]: [ITimer, (timer: ITimer) => void] = React.useState<ITimer>(timerService.getTimer());
 
   const tick = () => {
